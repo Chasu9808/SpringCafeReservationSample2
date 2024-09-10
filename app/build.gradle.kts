@@ -30,11 +30,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     //뷰 바인딩 설정, 뷰들을 하나의 인스턴스에 담아서, 꺼내서 사용하기., 뷰 선택하기 편하게
     viewBinding {
@@ -77,6 +77,13 @@ dependencies {
     implementation ("com.github.bumptech.glide:okhttp3-integration:4.12.0")
     // webkit, 다음 주소 웹 뷰 사용하기.
     implementation("androidx.webkit:webkit:1.8.0")
+    // multidex
+    implementation ("androidx.multidex:multidex:2.0.1")
+
+    //결제, 포트원, 샘플
+//        implementation ("com.github.iamport:iamport-android:1.4.5")
+//        implementation ("com.github.iamport:iamport-android:fix~custom_data-SNAPSHOT")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
