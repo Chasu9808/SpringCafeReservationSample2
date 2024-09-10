@@ -81,8 +81,8 @@ dependencies {
     implementation ("androidx.multidex:multidex:2.0.1")
 
     //결제, 포트원, 샘플
-//        implementation ("com.github.iamport:iamport-android:1.4.5")
-//        implementation ("com.github.iamport:iamport-android:fix~custom_data-SNAPSHOT")
+        implementation ("com.github.iamport:iamport-android:1.4.5")
+        implementation ("com.github.iamport:iamport-android:fix~custom_data-SNAPSHOT")
 
 
     implementation(libs.androidx.core.ktx)
