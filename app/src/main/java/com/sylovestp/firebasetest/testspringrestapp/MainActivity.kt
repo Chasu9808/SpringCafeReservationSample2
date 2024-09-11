@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityMainBinding
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.ui.ItemListActivity
 import com.sylovestp.firebasetest.testspringrestapp.pay.ui.MainActivity
 
@@ -64,6 +65,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.ch06LsyResBtn.setOnClickListener {
             val intent = Intent(this,ItemListActivity::class.java)
+            // 메세지 전달하기.
+            startActivity(intent)
+        }
+
+        binding.ch06LsyFragmentUiBtn.setOnClickListener {
+            val intent = Intent(this,MainFragmentActivity::class.java)
             // 메세지 전달하기.
             startActivity(intent)
         }

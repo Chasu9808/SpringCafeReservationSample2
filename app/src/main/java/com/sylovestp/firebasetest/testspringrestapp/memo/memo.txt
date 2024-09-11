@@ -1,0 +1,5 @@
+실행시 , 아이피 변경해야 할 파일
+1) ItemListAdapter
+2) MyApplication
+3) UserAdapter
+4) MyAdapterRetrofit

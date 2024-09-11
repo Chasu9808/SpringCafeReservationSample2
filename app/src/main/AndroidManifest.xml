@@ -21,6 +21,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".fragmentversionui.MainFragmentActivity"
+            android:exported="true" />
+        <activity
             android:name=".itemListPaging.ui.ItemListActivity"
             android:exported="true" />
 

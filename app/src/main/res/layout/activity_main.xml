@@ -96,6 +96,12 @@
                 android:layout_height="wrap_content"
                 android:text="예약 전체 현황 "/>
 
+            <Button
+                android:id="@+id/ch06LsyFragmentUiBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="프래그먼트 버전 UI"/>
+
 
         </LinearLayout>
 
