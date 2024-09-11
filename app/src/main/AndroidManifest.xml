@@ -20,6 +20,24 @@
         android:theme="@style/Theme.TestSpringRestApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <receiver
+            android:name=".pay.MerchantReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <activity
+            android:name=".pay.ui.MainActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="iamportsdkapp" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".PayTestActivity"
             android:exported="false" />
