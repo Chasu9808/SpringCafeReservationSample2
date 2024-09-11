@@ -12,43 +12,60 @@ import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityMainBinding
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityMainFragmentBinding
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerAdapter
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.FragmentFour
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.FragmentOne
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.FragmentThree
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.FragmentTwo
 
 class MainFragmentActivity : AppCompatActivity() {
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager2
-    private lateinit var adapter: ViewPagerAdapter
+    private lateinit var binding: ActivityMainFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
-        val binding = ActivityMainFragmentBinding.inflate(layoutInflater)
+        binding = ActivityMainFragmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        // 첫 번째 프래그먼트를 기본으로 로드
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, FragmentOne())
+            .commit()
 
-        //탭 레이아웃
-        tabLayout = binding.tabLayout
-        viewPager = binding.viewPager
+        // TabLayout의 탭 선택 리스너 설정
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val selectedFragment = when (tab.position) {
+                    0 -> FragmentOne()
+                    1 -> FragmentTwo()
+                    2 -> FragmentThree()
+                    3 -> FragmentFour()
+                    else -> FragmentOne()
+                }
 
-        adapter = ViewPagerAdapter(this)
-        viewPager.adapter = adapter
-
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = when (position) {
-                0 -> "Tab 1"
-                1 -> "Tab 2"
-                2 -> "Tab 3"
-                3 -> "Tab 4"
-                else -> "Tab 1"
+                // 프래그먼트 전환
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, selectedFragment)
+                    .commit()
             }
-        }.attach()
 
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // 탭이 선택되지 않았을 때 수행할 동작 (필요하면 구현)
+            }
 
-    } //onCreate
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // 이미 선택된 탭을 다시 선택했을 때 수행할 동작 (필요하면 구현)
+            }
+        })
 
+        // 탭 아이콘 및 텍스트 설정
+        setupTabIcons()
+    }
+
+    // 탭에 아이콘과 텍스트 설정하는 함수
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home_24px)?.text = "홈"
+        binding.tabLayout.getTabAt(1)?.setIcon(R.drawable.featured_seasonal_and_gifts_24px)?.text = "혜택"
+        binding.tabLayout.getTabAt(2)?.setIcon(R.drawable.local_mall_24px)?.text = "스토어"
+        binding.tabLayout.getTabAt(3)?.setIcon(R.drawable.photo_album_24px)?.text = "포토몰"
+    }
 }
