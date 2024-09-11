@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityMainBinding
+import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.ui.ItemListActivity
+import com.sylovestp.firebasetest.testspringrestapp.pay.ui.MainActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +57,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.ch06LsyPayBtn.setOnClickListener {
-            //회원가입 버튼 클릭시, 회원가입 페이지 이동하기.
-            val intent = Intent(this,PayTestActivity::class.java)
+            val intent = Intent(this,MainActivity::class.java)
             // 메세지 전달하기.
             startActivity(intent)
         }
+
+        binding.ch06LsyResBtn.setOnClickListener {
+            val intent = Intent(this,ItemListActivity::class.java)
+            // 메세지 전달하기.
+            startActivity(intent)
+        }
+
+
 
 
     } //oncreate

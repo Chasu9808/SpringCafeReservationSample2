@@ -5,6 +5,7 @@ import com.sylovestp.firebasetest.testspringrestapp.dto.LoginResponse
 import com.sylovestp.firebasetest.testspringrestapp.dto.PageResponse
 import com.sylovestp.firebasetest.testspringrestapp.dto.PredictionResult
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserItem
+import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.dto.ItemListDTO
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -50,4 +51,10 @@ interface INetworkService {
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Response<PageResponse<UserItem>>
+
+    @GET("/api/reservation-items/page")
+    suspend fun getItemList(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Response<PageResponse<ItemListDTO>>
 }

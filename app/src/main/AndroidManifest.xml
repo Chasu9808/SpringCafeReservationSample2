@@ -20,22 +20,25 @@
         android:theme="@style/Theme.TestSpringRestApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".itemListPaging.ui.ItemListActivity"
+            android:exported="true" />
+
         <receiver
             android:name=".pay.MerchantReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
 
         <activity
             android:name=".pay.ui.MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:scheme="iamportsdkapp" />
+                <data android:scheme="iamportsdkapp" />
             </intent-filter>
         </activity>
         <activity
@@ -78,7 +81,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" /> <!-- 임시 테스트 아이디 -->
+            android:exported="true"
+            android:launchMode="singleTop" /> <!-- 임시 테스트 아이디 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

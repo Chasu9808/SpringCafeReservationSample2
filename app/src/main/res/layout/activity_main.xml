@@ -84,6 +84,18 @@
                 android:layout_height="wrap_content"
                 android:text="결제 테스트 "/>
 
+<!--            <Button-->
+<!--                android:id="@+id/ch06LsyItemListBtn"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="상품 목록 "/>-->
+
+            <Button
+                android:id="@+id/ch06LsyResBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="예약 전체 현황 "/>
+
 
         </LinearLayout>
 

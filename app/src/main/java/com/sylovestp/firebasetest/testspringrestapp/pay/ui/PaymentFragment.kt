@@ -39,9 +39,24 @@ class PaymentFragment : Fragment() {
     private lateinit var binding: FragmentPaymentBinding
 
     private val receiver = MerchantReceiver()
+
+    // Activity 내의 모든 Fragment에서 동일한 ViewModel을 공유
+    // viewModel을 activityViewModels()에 의해 초기화하도록 위임
     val viewModel: ViewModel by activityViewModels()
 
+    // inflater: LayoutInflater: 레이아웃 XML 파일을 View 객체로 변환하는 도구입니다.
+    // 즉, inflater는 XML 레이아웃을 실제 화면에 보여줄 수 있는 View로 만듦
+
+    // container: ViewGroup?: Fragment가 그려질 부모 뷰 그룹입니다.
+    // 보통 Fragment가 포함될 Activity
+
+    // savedInstanceState: Bundle?: 이전 상태가 저장된 데이터를 전달받는 매개변수로,
+    // Fragment가 재생성될 때 상태를 복원하는 데 사용
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    //   메서드는 inflater를 사용해 XML 파일을 View 객체로 변환
+    //   container: Fragment가 배치될 부모 컨테이너입니다.
+    //   false: 세 번째 인수로 false를 전달하는 것은 View를 즉시 container에 추가하지 않겠다는 뜻입니다.
+    //   Fragment가 직접 부모에 뷰를 추가하지 않고, 시스템이 알아서 처리하게 됩니다.
         binding = FragmentPaymentBinding.inflate(inflater, container, false)
         initStart()
         return binding.root
