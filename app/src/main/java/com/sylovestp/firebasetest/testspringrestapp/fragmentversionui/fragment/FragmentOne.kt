@@ -41,6 +41,15 @@ class FragmentOne : Fragment() {
                 .commit()
         }
 
+        // user_join_icon 클릭 시 JoinFragment로 이동하는 코드
+        binding.userJoinIcon.setOnClickListener {
+            // 프래그먼트 전환을 위한 FragmentTransaction 사용
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, JoinFragment()) // JoinFragment로 전환
+                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
+                .commit()
+        }
+
         // Set up the ViewPager2 with an adapter
         val adapter = ViewPagerOneFragmentAdapter(this)
         binding.oneFragmentViewPager1.adapter = adapter
