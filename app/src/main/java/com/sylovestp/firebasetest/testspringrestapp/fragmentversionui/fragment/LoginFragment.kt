@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentLoginBinding
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.repository.LoginRepository
@@ -60,15 +61,28 @@ class LoginFragment : Fragment() {
 
         // 회원가입 버튼 클릭 리스너
         binding.loginJoinBtn.setOnClickListener {
-            val intent = Intent(requireActivity(), JoinActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            val joinFragment = JoinFragment()  // 이동하려는 프래그먼트 생성
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, joinFragment)  // 현재 프래그먼트를 JoinFragment로 교체
+                .addToBackStack(null)  // 백스택에 추가하여 뒤로가기 시 이전 프래그먼트로 돌아갈 수 있음
+                .commit()  // 트랜잭션 커밋
         }
 
         // 로그인 버튼 클릭 리스너
         binding.loginLoginBtn.setOnClickListener {
-            val username = binding.loginUsername.text.toString()
-            val password = binding.loginPassword.text.toString()
+            val username = binding.loginUsername.text.toString().trim()
+            val password = binding.loginPassword.text.toString().trim()
+
+            // 유효성 체크
+            if (username.isEmpty()) {
+                binding.loginUsername.error = "Username is required"
+                return@setOnClickListener
+            }
+
+            if (password.isEmpty()) {
+                binding.loginPassword.error = "Password is required"
+                return@setOnClickListener
+            }
 
             loginViewModel.login(username, password)
         }

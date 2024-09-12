@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.sylovestp.firebasetest.testspringrestapp.AddressFinder
 import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
+import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentJoinBinding
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserDTO
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
@@ -88,15 +89,60 @@ class JoinFragment : Fragment() {
         }
 
         binding.joinBtn.setOnClickListener {
-            val username = binding.userUsername.text.toString()
-            val name = binding.userName.text.toString()
-            val password = binding.userPassword1.text.toString()
-            val email = binding.userEmail.text.toString()
-            val phone = binding.userPhone.text.toString()
-            val address = binding.userAddress.text.toString()
-            val detailAddress = binding.userAddressDetail.text.toString()
-            val fullAddress = "$address $detailAddress"
+
+            val username = binding.userUsername.text.toString().trim()
+            val name = binding.userName.text.toString().trim()
+            val password = binding.userPassword1.text.toString().trim()
+            val password2 = binding.userPassword2.text.toString().trim()
+            val email = binding.userEmail.text.toString().trim()
+            val phone = binding.userPhone.text.toString().trim()
+            val address = binding.userAddress.text.toString().trim()
+            val detailAddress = binding.userAddressDetail.text.toString().trim()
+            val fullAddress = "$address $detailAddress".trim()
+
+            if (password.length < 6) {
+                binding.userPassword1.error = "Password must be at least 6 characters"
+                return@setOnClickListener
+            }
+
+            if (password2.length < 6) {
+                binding.userPassword2.error = "Password must be at least 6 characters"
+                return@setOnClickListener
+            }
+
+            // 비밀번호 유효성 체크
+            if (password.isEmpty()) {
+                binding.userPassword1.error = "Password is required"
+                return@setOnClickListener
+            }
+
+            if (password2.isEmpty()) {
+                binding.userPassword2.error = "Please confirm your password"
+                return@setOnClickListener
+            }
+
+            if (password != password2) {
+                binding.userPassword2.error = "Passwords do not match"
+                return@setOnClickListener
+            }
+
+            if (username.isEmpty()) {
+                binding.userName.error = "username is required"
+                return@setOnClickListener
+            }
+
+            if (name.isEmpty()) {
+                binding.userName.error = "name is required"
+                return@setOnClickListener
+            }
+
+            if (email.isEmpty()) {
+                binding.userEmail.error = "email is required"
+                return@setOnClickListener
+            }
+
             val userDTO = UserDTO(username, name, password, email, phone, fullAddress)
+
 
             Toast.makeText(requireContext(), "$username, $password, $email, $imageUri", Toast.LENGTH_SHORT).show()
 
@@ -104,9 +150,11 @@ class JoinFragment : Fragment() {
         }
 
         binding.loginBtn.setOnClickListener {
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            val loginFragment = LoginFragment()  // 이동하려는 프래그먼트 생성
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, loginFragment)  // 현재 프래그먼트를 JoinFragment로 교체
+                .addToBackStack(null)  // 백스택에 추가하여 뒤로가기 시 이전 프래그먼트로 돌아갈 수 있음
+                .commit()  // 트랜잭션 커밋
         }
 
         // ActivityResultLauncher 등록
@@ -131,9 +179,11 @@ class JoinFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "User created successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(requireContext(), LoginActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
+                    val fragmentOne = FragmentOne()  // 이동하려는 프래그먼트 생성
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragmentOne)  // 현재 프래그먼트를 JoinFragment로 교체
+                        .addToBackStack(null)  // 백스택에 추가하여 뒤로가기 시 이전 프래그먼트로 돌아갈 수 있음
+                        .commit()  // 트랜잭션 커밋
                 } else {
                     Toast.makeText(requireContext(), "Failed to create user: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
