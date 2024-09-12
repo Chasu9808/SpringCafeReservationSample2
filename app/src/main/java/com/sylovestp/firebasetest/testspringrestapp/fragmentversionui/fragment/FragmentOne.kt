@@ -1,5 +1,6 @@
 package com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -7,10 +8,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentOneBinding
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerAdapter
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerOneFragmentAdapter
+import com.sylovestp.firebasetest.testspringrestapp.pay.ui.MainActivity
 
 class FragmentOne : Fragment() {
     private lateinit var binding: FragmentOneBinding
@@ -49,6 +52,40 @@ class FragmentOne : Fragment() {
                 .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
                 .commit()
         }
+
+        // user_paging_icon 클릭 시 UserRecyclerViewFragment 이동하는 코드
+        binding.userPagingIcon.setOnClickListener {
+            // 프래그먼트 전환을 위한 FragmentTransaction 사용
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, UserRecyclerViewFragment()) // UserRecyclerViewFragment 전환
+                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
+                .commit()
+        }
+
+        // ai_Image_Classify_icon 클릭 시 AiPredictFragment 이동하는 코드
+        binding.aiImageClassifyIcon.setOnClickListener {
+            // 프래그먼트 전환을 위한 FragmentTransaction 사용
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, AiPredictFragment()) // AiPredictFragment 전환
+                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
+                .commit()
+        }
+
+        // payTestIcon 클릭 시 , 결제 액티비티로 MainActivity 이동하는 코드
+        binding.payTestIcon.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        // reservationListIcon 클릭 시 ReservationItemListFragment 이동하는 코드
+        binding.reservationListIcon.setOnClickListener {
+            // 프래그먼트 전환을 위한 FragmentTransaction 사용
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ReservationItemListFragment()) // ReservationItemListFragment 전환
+                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
+                .commit()
+        }
+
 
         // Set up the ViewPager2 with an adapter
         val adapter = ViewPagerOneFragmentAdapter(this)
