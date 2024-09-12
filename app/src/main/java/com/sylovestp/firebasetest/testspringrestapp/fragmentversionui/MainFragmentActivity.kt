@@ -27,7 +27,7 @@ class MainFragmentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Add tabs
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("홈").setIcon(R.drawable.home_24px))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("홈").setIcon(R.drawable.home_24px_fill))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("혜택").setIcon(R.drawable.featured_seasonal_and_gifts_24px))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("스토어").setIcon(R.drawable.local_mall_24px))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("포토몰").setIcon(R.drawable.photo_album_24px))
@@ -49,6 +49,14 @@ class MainFragmentActivity : AppCompatActivity() {
                     else -> FragmentOne()
                 }
 
+                // 선택된 탭에 따라 아이콘 변경
+                when (tab.position) {
+                    0 -> tab.setIcon(R.drawable.home_24px_fill)
+                    1 -> tab.setIcon(R.drawable.featured_seasonal_and_gifts_24px_fill)
+                    2 -> tab.setIcon(R.drawable.local_mall_24px_fill)
+                    3 -> tab.setIcon(R.drawable.photo_album_24px_fill)
+                }
+
                 // 프래그먼트 전환
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, selectedFragment)
@@ -56,7 +64,15 @@ class MainFragmentActivity : AppCompatActivity() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // 탭이 선택되지 않았을 때 수행할 동작 (필요하면 구현)
+                // 탭이 선택 해제될 때 아이콘을 원래대로 변경
+                if (tab != null) {
+                    when (tab.position) {
+                        0 -> tab.setIcon(R.drawable.home_24px)
+                        1 -> tab.setIcon(R.drawable.featured_seasonal_and_gifts_24px)
+                        2 -> tab.setIcon(R.drawable.local_mall_24px)
+                        3 -> tab.setIcon(R.drawable.photo_album_24px)
+                    }
+                }
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
