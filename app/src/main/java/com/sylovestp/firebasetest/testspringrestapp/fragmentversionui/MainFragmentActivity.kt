@@ -26,6 +26,13 @@ class MainFragmentActivity : AppCompatActivity() {
         binding = ActivityMainFragmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Add tabs
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("홈").setIcon(R.drawable.home_24px))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("혜택").setIcon(R.drawable.featured_seasonal_and_gifts_24px))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("스토어").setIcon(R.drawable.local_mall_24px))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("포토몰").setIcon(R.drawable.photo_album_24px))
+
+
         // 첫 번째 프래그먼트를 기본으로 로드
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, FragmentOne())
@@ -57,15 +64,7 @@ class MainFragmentActivity : AppCompatActivity() {
             }
         })
 
-        // 탭 아이콘 및 텍스트 설정
-        setupTabIcons()
-    }
 
-    // 탭에 아이콘과 텍스트 설정하는 함수
-    private fun setupTabIcons() {
-        binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home_24px)?.text = "홈"
-        binding.tabLayout.getTabAt(1)?.setIcon(R.drawable.featured_seasonal_and_gifts_24px)?.text = "혜택"
-        binding.tabLayout.getTabAt(2)?.setIcon(R.drawable.local_mall_24px)?.text = "스토어"
-        binding.tabLayout.getTabAt(3)?.setIcon(R.drawable.photo_album_24px)?.text = "포토몰"
-    }
+    } //onCreate
+
 }
