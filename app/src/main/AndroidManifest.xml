@@ -45,9 +45,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PayTestActivity"
-            android:exported="false" />
-        <activity
             android:name=".AddressFinder"
             android:exported="true">
             <intent-filter>

@@ -77,6 +77,12 @@ class FragmentOne : Fragment() {
             startActivity(intent)
         }
 
+        // 액티비티 버전 메인 ui
+        binding.activityUiVersionIcon.setOnClickListener {
+            val intent = Intent(requireContext(), com.sylovestp.firebasetest.testspringrestapp.MainActivity::class.java)
+            startActivity(intent)
+        }
+
         // reservationListIcon 클릭 시 ReservationItemListFragment 이동하는 코드
         binding.reservationListIcon.setOnClickListener {
             // 프래그먼트 전환을 위한 FragmentTransaction 사용

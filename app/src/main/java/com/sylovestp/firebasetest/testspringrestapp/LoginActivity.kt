@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityLoginBinding
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityMainBinding
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.repository.LoginRepository
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
@@ -58,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
             if (success) {
                 Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                 // 로그인 성공 시 다음 화면으로 이동
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, MainFragmentActivity::class.java))
                 finish()
             } else {
                 // 로그인 실패 시 메시지 표시

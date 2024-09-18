@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityMainBinding
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivitySplashBinding
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +22,7 @@ class SplashActivity : AppCompatActivity() {
             // 시스템아 나 다른 페이지로 이동 시켜줘.
             //예) 시스템아 나 갤러리 화면에서 사진 선택하고 싶으니, 거기로 이동시켜줘.
             // 예2) 시스탐아 나 다른 화면에 데이터도 같이 전달할게, 전달해줘.
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this,LoginActivity::class.java)
             // 메세지 전달하기.
             startActivity(intent)
             // 현재 액티비티를 종료한다.

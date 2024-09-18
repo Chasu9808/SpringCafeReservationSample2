@@ -39,8 +39,8 @@ class ItemListAdapter : PagingDataAdapter<ItemListDTO, ItemListAdapter.ItemListV
             binding.itemPrice.text = item.price.toString()
             binding.itemDescription.text = item.description
 
-            val imageUrl = "http://10.100.201.87:8080/items/${item.itemRepImageId}/itemImageObjectId"
-//            val imageUrl = "http://http://192.168.219.200:8080/items/${item.itemRepImageId}/itemImageObjectId"
+//            val imageUrl = "http://10.100.201.87:8080/items/${item.itemRepImageId}/itemImageObjectId"
+            val imageUrl = "http://http://192.168.219.200:8080/items/${item.itemRepImageId}/itemImageObjectId"
             Glide.with(binding.root.context)
                 .load(imageUrl)
                 .placeholder(R.drawable.user_basic)

@@ -2,6 +2,7 @@ package com.sylovestp.firebasetest.testspringrestapp.retrofit
 
 import android.app.Application
 import android.content.Context
+import com.google.gson.GsonBuilder
 import com.sylovestp.firebasetest.testspringrestapp.interceptor.AuthInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -14,8 +15,8 @@ class MyApplication : Application(){
     private lateinit var apiService: INetworkService
 
     // http 퍼미션 허용 및, 로컬호스트 안될시 아이피로 확인 하기.
-    val BASE_URL = "http://10.100.201.87:8080"
-//    val BASE_URL = "http://192.168.219.200:8080"
+//    val BASE_URL = "http://10.100.201.87:8080"
+    val BASE_URL = "http://192.168.219.200:8080"
 
     //add....................................
     var networkService: INetworkService

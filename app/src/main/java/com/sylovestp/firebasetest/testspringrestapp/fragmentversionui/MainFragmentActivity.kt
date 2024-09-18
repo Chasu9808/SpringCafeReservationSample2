@@ -16,6 +16,7 @@ import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.F
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.FragmentOne
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.FragmentThree
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.FragmentTwo
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.LoginFragment
 
 class MainFragmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainFragmentBinding
@@ -32,6 +33,13 @@ class MainFragmentActivity : AppCompatActivity() {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("스토어").setIcon(R.drawable.local_mall_24px))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("포토몰").setIcon(R.drawable.photo_album_24px))
 
+
+        // LoginFragment 로드
+//        if (savedInstanceState == null) {
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, LoginFragment())
+//                .commitNow()
+//        }
 
         // 첫 번째 프래그먼트를 기본으로 로드
         supportFragmentManager.beginTransaction()
