@@ -24,6 +24,7 @@ class LoginRepository(private val apiService: INetworkService, private val share
             val phone = response.body()?.phone
             val address = response.body()?.address
             val social = response.body()?.social
+            val id = response.body()?.id
 //            val profileImageServer = response.body()?.profileImageServer
             Log.d("lsy name ","${name}" )
             Log.d("lsy address ","${address}" )
@@ -42,6 +43,9 @@ class LoginRepository(private val apiService: INetworkService, private val share
             sharedPreferences.edit().putString("phone", phone).apply()
             sharedPreferences.edit().putString("address", address).apply()
             sharedPreferences.edit().putString("social", social).apply()
+            if (id != null) {
+                sharedPreferences.edit().putLong("id", id).apply()
+            }
 //            sharedPreferences.edit().putString("profileImageServer", profileImageServer).apply()
 
             true

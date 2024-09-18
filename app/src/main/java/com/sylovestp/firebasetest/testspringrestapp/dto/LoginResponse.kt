@@ -10,5 +10,6 @@ data class LoginResponse(
     val phone: String,
     val address: String,
     val social: String,
+    val id: Long,
 //    val profileImageServer: String,
 )

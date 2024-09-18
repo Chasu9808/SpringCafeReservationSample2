@@ -1,13 +1,16 @@
 package com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentOneBinding
@@ -91,6 +94,29 @@ class FragmentOne : Fragment() {
                 .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
                 .commit()
         }
+
+        // SharedPreferences 객체를 가져옴
+        val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+        // SharedPreferences에서 "jwt_token"이라는 키로 저장된 토큰을 가져옴
+        val userName = sharedPreferences.getString("name", null)
+
+        val userEmail = sharedPreferences.getString("email", null)
+
+        val userProfileImageId = sharedPreferences.getLong("id", 0)
+        Log.d("lsy userProfileImageId","${userProfileImageId}")
+
+
+        binding.userName.text = userName
+        binding.userEmail.text = userEmail
+
+// 이미지 URL 설정
+        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
+
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .placeholder(R.drawable.user_basic)
+            .into(binding.userProfileImage)
 
 
         // Set up the ViewPager2 with an adapter
