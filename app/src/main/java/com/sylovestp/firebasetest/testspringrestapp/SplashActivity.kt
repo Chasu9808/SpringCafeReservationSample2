@@ -1,6 +1,8 @@
 package com.sylovestp.firebasetest.testspringrestapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +14,8 @@ import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivitySplashBi
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 
 class SplashActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,6 +26,8 @@ class SplashActivity : AppCompatActivity() {
             // 시스템아 나 다른 페이지로 이동 시켜줘.
             //예) 시스템아 나 갤러리 화면에서 사진 선택하고 싶으니, 거기로 이동시켜줘.
             // 예2) 시스탐아 나 다른 화면에 데이터도 같이 전달할게, 전달해줘.
+
+
             val intent = Intent(this,LoginActivity::class.java)
             // 메세지 전달하기.
             startActivity(intent)

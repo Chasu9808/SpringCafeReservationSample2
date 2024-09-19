@@ -42,6 +42,17 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+
+// 자동 로그인 여부 확인
+        val isAutoLogin = sharedPreferences.getBoolean("auto_login", false)
+
+        if (isAutoLogin) {
+            // 자동 로그인이 설정된 경우, 바로 메인 액티비티로 이동
+            val intent = Intent(this, MainFragmentActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         binding.loginJoinBtn.setOnClickListener {
             val intent = Intent(this@LoginActivity, JoinActivity::class.java)
             startActivity(intent)
@@ -58,6 +69,22 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this) { success ->
             if (success) {
                 Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+
+                // 로그인 성공 후 자동 로그인 체크 여부 저장
+                val isAutoLoginChecked = binding.autoLoginCheckBox.isChecked  // 체크박스 상태 확인
+
+                if (isAutoLoginChecked) {
+                    // 자동 로그인이 체크된 경우
+                    sharedPreferences.edit()
+                        .putBoolean("auto_login", true)
+                        .apply()
+                } else {
+                    // 자동 로그인이 체크되지 않은 경우
+                    sharedPreferences.edit()
+                        .putBoolean("auto_login", false)
+                        .apply()
+                }
+
                 // 로그인 성공 시 다음 화면으로 이동
                 startActivity(Intent(this, MainFragmentActivity::class.java))
                 finish()
