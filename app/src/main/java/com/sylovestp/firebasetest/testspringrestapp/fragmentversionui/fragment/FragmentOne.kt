@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
 import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
@@ -122,15 +123,31 @@ class FragmentOne : Fragment() {
 
         //로그아웃 버튼
         binding.logoutBtn.setOnClickListener {
-            val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            // SharedPreferences 값 삭제
-            sharedPreferences.edit().clear().apply()
-            // 로그인 액티비티로 이동
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
+            // 다이얼로그를 생성하여 로그아웃 여부 확인
+            AlertDialog.Builder(requireContext())
+                .setTitle("로그아웃")
+                .setMessage("정말 로그아웃 하시겠습니까?")
+                .setPositiveButton("확인") { dialog, _ ->
+                    // 확인 버튼 클릭 시 로그아웃 처리
+                    val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
-            // 현재 액티비티 종료
-            requireActivity().finish()
+                    // SharedPreferences 값 삭제
+                    sharedPreferences.edit().clear().apply()
+
+                    // 로그인 액티비티로 이동
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    startActivity(intent)
+
+                    // 현재 액티비티 종료
+                    requireActivity().finish()
+
+                    dialog.dismiss() // 다이얼로그 닫기
+                }
+                .setNegativeButton("취소") { dialog, _ ->
+                    // 취소 버튼 클릭 시 다이얼로그 닫기
+                    dialog.dismiss()
+                }
+                .show()
         }
 
 
