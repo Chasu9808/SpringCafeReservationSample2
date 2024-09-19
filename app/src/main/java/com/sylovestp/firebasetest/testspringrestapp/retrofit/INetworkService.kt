@@ -45,6 +45,10 @@ interface INetworkService {
         @Path("id") id: Long,                         // 사용자 ID 경로 변수
     ): Call<ResponseBody>
 
+    @POST("/oauth2/authorization/kakao")
+    fun kakaoLogin(
+    ): Response<LoginResponse>
+
     @Multipart
     @POST("/public/users")
 //    fun registerUser(@Body userDTO: UserDTO): Call<Void>

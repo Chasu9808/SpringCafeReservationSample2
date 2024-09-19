@@ -3,6 +3,7 @@ package com.sylovestp.firebasetest.testspringrestapp.retrofit
 import android.app.Application
 import android.content.Context
 import com.google.gson.GsonBuilder
+import com.kakao.sdk.common.KakaoSdk
 import com.sylovestp.firebasetest.testspringrestapp.interceptor.AuthInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -13,6 +14,15 @@ class MyApplication : Application(){
     private lateinit var okHttpClient: OkHttpClient
     private lateinit var retrofit_token: Retrofit
     private lateinit var apiService: INetworkService
+
+    override fun onCreate() {
+        super.onCreate()
+
+        // Kakao Sdk 초기화
+//        KakaoSdk.init(this, "네이티브 앱 키")
+        KakaoSdk.init(this, "네이티브 앱 키")
+
+    }
 
     // http 퍼미션 허용 및, 로컬호스트 안될시 아이피로 확인 하기.
 //    val BASE_URL = "http://10.100.201.87:8080"
@@ -58,5 +68,6 @@ class MyApplication : Application(){
 
     init {
         networkService = retrofit.create(INetworkService::class.java)
+
     }
 }

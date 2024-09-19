@@ -75,6 +75,13 @@
                 android:layout_height="wrap_content"
                 android:text="로그인"/>
 
+            <ImageView
+                android:id="@+id/kakaoLogin"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/kakao_login_medium_narrow"/>
+
 
         </LinearLayout>
 

@@ -11,5 +11,5 @@ data class LoginResponse(
     val address: String,
     val social: String,
     val id: Long,
-//    val profileImageServer: String,
+    val profileImageServer: String?,
 )
