@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
 import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
@@ -97,6 +98,15 @@ class FragmentOne : Fragment() {
                 .commit()
         }
 
+        // 마이페이지 이동하는 코드
+        binding.userProfileImage.setOnClickListener {
+            // 프래그먼트 전환을 위한 FragmentTransaction 사용
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, MyPageFragment()) // ReservationItemListFragment 전환
+                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
+                .commit()
+        }
+
         // SharedPreferences 객체를 가져옴
         val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
@@ -118,6 +128,7 @@ class FragmentOne : Fragment() {
 
         Glide.with(requireContext())
             .load(imageUrl)
+            .apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.user_basic)
             .into(binding.userProfileImage)
 
