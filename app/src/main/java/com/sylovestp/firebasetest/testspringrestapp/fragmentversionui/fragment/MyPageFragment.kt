@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,10 +24,12 @@ import com.bumptech.glide.request.FutureTarget
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.sylovestp.firebasetest.testspringrestapp.AddressFinder
+import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentJoinBinding
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentMyPageBinding
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserDTO
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -118,64 +121,87 @@ class MyPageFragment : Fragment() {
 
         // 회원 수정
         binding.updateUserBtn.setOnClickListener {
-
-            val username = binding.userUsername.text.toString().trim()
-            val name = binding.userName.text.toString().trim()
-            val password = binding.userPassword1.text.toString().trim()
-            val password2 = binding.userPassword2.text.toString().trim()
-            val email = binding.userEmail.text.toString().trim()
-            val phone = binding.userPhone.text.toString().trim()
-            val address = binding.userAddress.text.toString().trim()
-            val detailAddress = binding.userAddressDetail.text.toString().trim()
-            val fullAddress = "$address $detailAddress".trim()
-
-            if (password.length < 6) {
-                binding.userPassword1.error = "Password must be at least 6 characters"
-                return@setOnClickListener
-            }
-
-            if (password2.length < 6) {
-                binding.userPassword2.error = "Password must be at least 6 characters"
-                return@setOnClickListener
-            }
-
-            // 비밀번호 유효성 체크
-            if (password.isEmpty()) {
-                binding.userPassword1.error = "Password is required"
-                return@setOnClickListener
-            }
-
-            if (password2.isEmpty()) {
-                binding.userPassword2.error = "Please confirm your password"
-                return@setOnClickListener
-            }
-
-            if (password != password2) {
-                binding.userPassword2.error = "Passwords do not match"
-                return@setOnClickListener
-            }
-
-            if (username.isEmpty()) {
-                binding.userName.error = "username is required"
-                return@setOnClickListener
-            }
-
-            if (name.isEmpty()) {
-                binding.userName.error = "name is required"
-                return@setOnClickListener
-            }
-
-            if (email.isEmpty()) {
-                binding.userEmail.error = "email is required"
-                return@setOnClickListener
-            }
-
-            val userDTO = UserDTO(username, name, password, email, phone, fullAddress)
+            // 다이얼로그를 생성하여 로그아웃 여부 확인
+            AlertDialog.Builder(requireContext())
+                .setTitle("회원수정")
+                .setMessage("정말 회원수정 하시겠습니까?")
+                .setPositiveButton("확인") { dialog, _ ->
 
 
-            Toast.makeText(requireContext(), "$username, $password, $email, $imageUri", Toast.LENGTH_SHORT).show()
+                    val userId = sharedPreferences.getLong("id", 0)
+                    val username = binding.userUsername.text.toString().trim()
+                    val name = binding.userName.text.toString().trim()
+                    val password = binding.userPassword1.text.toString().trim()
+                    val password2 = binding.userPassword2.text.toString().trim()
+                    val email = binding.userEmail.text.toString().trim()
+                    val phone = binding.userPhone.text.toString().trim()
+                    val address = binding.userAddress.text.toString().trim()
+                    val detailAddress = binding.userAddressDetail.text.toString().trim()
+                    val fullAddress = "$address $detailAddress".trim()
 
-            imageUri?.let { uri -> processImage(userDTO, uri) }
+                    if (password.length < 6) {
+                        binding.userPassword1.error = "Password must be at least 6 characters"
+                        return@setPositiveButton
+                    }
+
+                    if (password2.length < 6) {
+                        binding.userPassword2.error = "Password must be at least 6 characters"
+                        return@setPositiveButton
+                    }
+
+                    // 비밀번호 유효성 체크
+                    if (password.isEmpty()) {
+                        binding.userPassword1.error = "Password is required"
+                        return@setPositiveButton
+                    }
+
+                    if (password2.isEmpty()) {
+                        binding.userPassword2.error = "Please confirm your password"
+                        return@setPositiveButton
+                    }
+
+                    if (password != password2) {
+                        binding.userPassword2.error = "Passwords do not match"
+                        return@setPositiveButton
+                    }
+
+                    if (username.isEmpty()) {
+                        binding.userName.error = "username is required"
+                        return@setPositiveButton
+                    }
+
+                    if (name.isEmpty()) {
+                        binding.userName.error = "name is required"
+                        return@setPositiveButton
+                    }
+
+                    if (email.isEmpty()) {
+                        binding.userEmail.error = "email is required"
+                        return@setPositiveButton
+                    }
+
+                    val userDTO = UserDTO(username, name, password, email, phone, fullAddress)
+
+
+                    Toast.makeText(requireContext(), "$username, $password, $email, $imageUri", Toast.LENGTH_SHORT).show()
+
+                    imageUri?.let { uri -> processImage(userDTO, uri) }
+
+                    // 로그인 액티비티로 이동
+                    val intent = Intent(requireContext(), MainFragmentActivity::class.java)
+                    startActivity(intent)
+
+                    // 현재 액티비티 종료
+                    requireActivity().finish()
+
+                    dialog.dismiss() // 다이얼로그 닫기
+                }
+                .setNegativeButton("취소") { dialog, _ ->
+                    // 취소 버튼 클릭 시 다이얼로그 닫기
+                    dialog.dismiss()
+                }
+                .show()
+
         }
 
         //회원탈퇴
@@ -202,6 +228,10 @@ class MyPageFragment : Fragment() {
         }
     }
 
+    //회원 정보 수정 형식으로 변경 필요.
+    // INetworkService
+    // registerUser , 변경.
+    // updateUser , 메서드 확인
     private fun uploadData(user: RequestBody, profileImage: MultipartBody.Part?) {
         val networkService = (requireActivity().applicationContext as MyApplication).networkService
         val call = networkService.registerUser(user, profileImage)

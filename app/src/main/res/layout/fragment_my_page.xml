@@ -45,14 +45,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="id 입력해주세요"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
 
                 <EditText
                     android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="name 입력해주세요"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
 
                 <EditText
                     android:id="@+id/user_email"
