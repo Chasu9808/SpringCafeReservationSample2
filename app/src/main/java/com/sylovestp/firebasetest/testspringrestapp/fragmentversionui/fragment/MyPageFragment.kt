@@ -110,7 +110,8 @@ class MyPageFragment : Fragment() {
         val userAddress = sharedPreferences.getString("address", null)
 
         val userProfileImageId = sharedPreferences.getLong("id", 0)
-        val imageUrl = "http://10.100.201.87:8080/api/users/${userProfileImageId}/profileImage"
+//        val imageUrl = "http://10.100.201.87:8080/api/users/${userProfileImageId}/profileImage"
+        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
         Glide.with(requireContext())
             .load(imageUrl)
             .apply(RequestOptions().circleCrop())
@@ -220,11 +221,54 @@ class MyPageFragment : Fragment() {
 
         //회원탈퇴
         binding.deleteUserBtn.setOnClickListener {
-            val loginFragment = LoginFragment()  // 이동하려는 프래그먼트 생성
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, loginFragment)  // 현재 프래그먼트를 JoinFragment로 교체
-                .addToBackStack(null)  // 백스택에 추가하여 뒤로가기 시 이전 프래그먼트로 돌아갈 수 있음
-                .commit()  // 트랜잭션 커밋
+            // 다이얼로그를 생성하여 로그아웃 여부 확인
+            AlertDialog.Builder(requireContext())
+                .setTitle("회원탈퇴")
+                .setMessage("정말 회원탈퇴 하시겠습니까?")
+                .setPositiveButton("확인") { dialog, _ ->
+
+
+                    val userId = sharedPreferences.getLong("id", 0)
+                    val password = binding.userPassword1.text.toString().trim()
+                    val password2 = binding.userPassword2.text.toString().trim()
+
+                    if (password.length < 6) {
+                        binding.userPassword1.error = "Password must be at least 6 characters"
+                        return@setPositiveButton
+                    }
+
+                    if (password2.length < 6) {
+                        binding.userPassword2.error = "Password must be at least 6 characters"
+                        return@setPositiveButton
+                    }
+
+                    // 비밀번호 유효성 체크
+                    if (password.isEmpty()) {
+                        binding.userPassword1.error = "Password is required"
+                        return@setPositiveButton
+                    }
+
+                    if (password2.isEmpty()) {
+                        binding.userPassword2.error = "Please confirm your password"
+                        return@setPositiveButton
+                    }
+
+                    if (password != password2) {
+                        binding.userPassword2.error = "Passwords do not match"
+                        return@setPositiveButton
+                    }
+
+                    //로직처리
+                    deleteUser()
+
+                    dialog.dismiss() // 다이얼로그 닫기
+                }
+                .setNegativeButton("취소") { dialog, _ ->
+                    // 취소 버튼 클릭 시 다이얼로그 닫기
+                    dialog.dismiss()
+                }
+                .show()
+
         }
 
         // ActivityResultLauncher 등록
@@ -281,6 +325,41 @@ class MyPageFragment : Fragment() {
         })
     }
 
+    private fun deleteUserData() {
+        val myApplication = requireActivity().applicationContext as MyApplication
+        myApplication.initialize(requireActivity())
+        apiService = myApplication.getApiService()
+        //
+        val userId = sharedPreferences.getLong("id", 0)
+        val call = apiService.deleteUser(userId)
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "User deleted successfully", Toast.LENGTH_SHORT).show()
+
+                    sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+                    // SharedPreferences 값 삭제
+                    sharedPreferences.edit().clear().apply()
+
+                    Toast.makeText(requireContext(), "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show()
+                    // 로그인 액티비티로 이동
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    startActivity(intent)
+
+                    // 현재 액티비티 종료
+                    requireActivity().finish()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to deleted user: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(requireContext(), "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun createRequestBodyFromDTO(userDTO: UserDTO): RequestBody {
         val gson = Gson()
         val json = gson.toJson(userDTO)
@@ -295,6 +374,23 @@ class MyPageFragment : Fragment() {
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         selectImageLauncher.launch(intent)
+    }
+
+    private fun deleteUser() {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+
+                deleteUserData()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "delete user successfully", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Error delete user", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun processImage(userDTO: UserDTO, uri: Uri) {

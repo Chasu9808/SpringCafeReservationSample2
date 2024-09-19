@@ -12,6 +12,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -37,6 +38,11 @@ interface INetworkService {
         @Path("id") id: Long,                         // 사용자 ID 경로 변수
         @Part("user") user: RequestBody,          // JSON 데이터
         @Part profileImage: MultipartBody.Part? = null    // 파일 데이터 (Optional)
+    ): Call<ResponseBody>
+
+    @DELETE("/api/users/{id}")
+    fun deleteUser(
+        @Path("id") id: Long,                         // 사용자 ID 경로 변수
     ): Call<ResponseBody>
 
     @Multipart
