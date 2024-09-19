@@ -2,6 +2,7 @@ package com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -30,6 +31,7 @@ import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentJoinBind
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentMyPageBinding
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserDTO
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
+import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -48,10 +50,12 @@ import java.io.ByteArrayOutputStream
 
 class MyPageFragment : Fragment() {
 
+    private lateinit var apiService: INetworkService
     private lateinit var imageView: ImageView
     private lateinit var binding: FragmentMyPageBinding
     private var imageUri: Uri? = null  // Nullable URI
     private lateinit var addressFinderLauncher: ActivityResultLauncher<Bundle>
+    lateinit var sharedPreferences: SharedPreferences
 
 
     private val selectImageLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -95,7 +99,7 @@ class MyPageFragment : Fragment() {
 
         // 로그인 한 유저 정보 가져오기.
         // SharedPreferences 객체를 가져옴
-        val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
         // SharedPreferences에서 "jwt_token"이라는 키로 저장된 토큰을 가져옴
         val userUserName = sharedPreferences.getString("username", null)
@@ -185,7 +189,14 @@ class MyPageFragment : Fragment() {
 
                     Toast.makeText(requireContext(), "$username, $password, $email, $imageUri", Toast.LENGTH_SHORT).show()
 
-                    imageUri?.let { uri -> processImage(userDTO, uri) }
+                    // 이미지가 있는 경우, 없는 경우
+                    imageUri?.let { uri ->
+                        // imageUri가 null이 아닐 경우
+                        processImage(userDTO, uri)
+                    } ?: run {
+                        // imageUri가 null일 경우
+                        processImage2(userDTO)
+                    }
 
                     // 로그인 액티비티로 이동
                     val intent = Intent(requireContext(), MainFragmentActivity::class.java)
@@ -233,19 +244,23 @@ class MyPageFragment : Fragment() {
     // registerUser , 변경.
     // updateUser , 메서드 확인
     private fun uploadData(user: RequestBody, profileImage: MultipartBody.Part?) {
-        val networkService = (requireActivity().applicationContext as MyApplication).networkService
-        val call = networkService.registerUser(user, profileImage)
+        val myApplication = requireActivity().applicationContext as MyApplication
+        myApplication.initialize(requireActivity())
+        apiService = myApplication.getApiService()
+        //
+        val userId = sharedPreferences.getLong("id", 0)
+        val call = apiService.updateUser(userId,user, profileImage)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "User created successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "User updated successfully", Toast.LENGTH_SHORT).show()
                     val fragmentOne = FragmentOne()  // 이동하려는 프래그먼트 생성
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, fragmentOne)  // 현재 프래그먼트를 JoinFragment로 교체
                         .addToBackStack(null)  // 백스택에 추가하여 뒤로가기 시 이전 프래그먼트로 돌아갈 수 있음
                         .commit()  // 트랜잭션 커밋
                 } else {
-                    Toast.makeText(requireContext(), "Failed to create user: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to updated user: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -288,6 +303,32 @@ class MyPageFragment : Fragment() {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Error processing image", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // imageUri가 null일 때 호출되는 함수
+    private fun processImage2(userDTO: UserDTO) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val userRequestBody = createRequestBodyFromDTO(userDTO)
+
+                // 파일 없이 JSON 데이터만 전송
+                uploadData(userRequestBody, null)
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Data processed successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Error processing data", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
