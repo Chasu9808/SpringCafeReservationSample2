@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
 import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
@@ -130,7 +131,10 @@ class FragmentOne : Fragment() {
             .load(imageUrl)
             .apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.user_basic)
+            .skipMemoryCache(true)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(binding.userProfileImage)
+
 
         //로그아웃 버튼
         binding.logoutBtn.setOnClickListener {

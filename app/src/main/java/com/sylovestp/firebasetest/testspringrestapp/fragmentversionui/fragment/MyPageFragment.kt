@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.FutureTarget
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
@@ -114,6 +115,8 @@ class MyPageFragment : Fragment() {
             .load(imageUrl)
             .apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.user_basic)
+            .skipMemoryCache(true)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(binding.userProfile)
 
         binding.userUsername.setText(userUserName)
@@ -254,11 +257,19 @@ class MyPageFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "User updated successfully", Toast.LENGTH_SHORT).show()
-                    val fragmentOne = FragmentOne()  // 이동하려는 프래그먼트 생성
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, fragmentOne)  // 현재 프래그먼트를 JoinFragment로 교체
-                        .addToBackStack(null)  // 백스택에 추가하여 뒤로가기 시 이전 프래그먼트로 돌아갈 수 있음
-                        .commit()  // 트랜잭션 커밋
+
+                    sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+                    // SharedPreferences 값 삭제
+                    sharedPreferences.edit().clear().apply()
+
+                    Toast.makeText(requireContext(), "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show()
+                    // 로그인 액티비티로 이동
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    startActivity(intent)
+
+                    // 현재 액티비티 종료
+                    requireActivity().finish()
                 } else {
                     Toast.makeText(requireContext(), "Failed to updated user: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
