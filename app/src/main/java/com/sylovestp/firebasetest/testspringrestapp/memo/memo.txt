@@ -3,6 +3,7 @@
 2) MyApplication
 3) UserAdapter
 4) MyAdapterRetrofit
+5) FragmentOne
 
 로그인 후, 프래그먼트 버전 ui 로 이동,
 스프링 서버 및, 마리아디비, 장고, 몽고 디비 확인 .

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
+import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentOneBinding
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerAdapter
@@ -111,12 +112,26 @@ class FragmentOne : Fragment() {
         binding.userEmail.text = userEmail
 
 // 이미지 URL 설정
-        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
+//        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
+        val imageUrl = "http://10.100.201.87:8080/api/users/${userProfileImageId}/profileImage"
 
         Glide.with(requireContext())
             .load(imageUrl)
             .placeholder(R.drawable.user_basic)
             .into(binding.userProfileImage)
+
+        //로그아웃 버튼
+        binding.logoutBtn.setOnClickListener {
+            val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            // SharedPreferences 값 삭제
+            sharedPreferences.edit().clear().apply()
+            // 로그인 액티비티로 이동
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+
+            // 현재 액티비티 종료
+            requireActivity().finish()
+        }
 
 
         // Set up the ViewPager2 with an adapter
