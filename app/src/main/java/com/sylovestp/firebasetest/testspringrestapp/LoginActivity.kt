@@ -38,7 +38,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val keyHash = Utility.getKeyHash(this)
-        Log.d("Hash", keyHash)
+        // 아래 로그값을 , 카카오 개발자 콘솔에 , 플랫폼 -> 안드로이드 -> 패키지명과, 키 해시 등록하기. 중요함.
+        Log.d("lsy hash", "keyhash : ${Utility.getKeyHash(this)}")
 
         val myApplication = applicationContext as MyApplication
         val myApplication2 = applicationContext as MyApplication
@@ -128,12 +129,14 @@ class LoginActivity : AppCompatActivity() {
                         Log.i("lsy", "카카오톡으로 로그인 성공 11 loginWithKakaoAccount")
                     } else if (token != null) {
                         Log.i("lsy", "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        getUserInfo()
                         startActivity(Intent(this, MainFragmentActivity::class.java))
                         finish()
                     }
                 }
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+                getUserInfo()
                 Log.i("lsy", "카카오톡으로 로그인 성공 12 loginWithKakaoAccount")
 
             }
@@ -170,6 +173,20 @@ class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels {
         val loginRepository = LoginRepository(apiService, sharedPreferences)
         LoginViewModelFactory(loginRepository)
+    }
+    // 사용자 정보 요청 함수
+    private fun getUserInfo() {
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                Log.e("lsy KakaoLogin", "사용자 정보 요청 실패", error)
+            } else if (user != null) {
+                Log.i("lsy KakaoLogin", "사용자 정보 요청 성공")
+                Log.i("lsy KakaoLogin", "닉네임: ${user.kakaoAccount?.profile?.nickname}")
+                Log.i("lsy KakaoLogin", "이메일: ${user.kakaoAccount?.email}")
+                Log.i("lsy KakaoLogin", "프로필 사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
+                // 여기서 사용자 정보를 이용해 추가적인 작업 수행
+            }
+        }
     }
 
 

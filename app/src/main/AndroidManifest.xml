@@ -23,26 +23,27 @@
         android:theme="@style/Theme.TestSpringRestApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31" >
-        <activity
-            android:name=".AuthCodeHandlerActivity"
-            android:exported="true" >
-            <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-
-            <data android:host="oauth"
-                android:scheme="kakao네이티브 앱 키" />
-
-            </intent-filter>
-        </activity>
-
-<!--        <meta-data-->
-<!--            android:name="com.kakao.sdk.AppKey"-->
-<!--            android:value="네이티브앱키" />-->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="네이티브 앱 키" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakao네이티브 앱 키" />
+            </intent-filter>
+        </activity>
+<!--공식 문서 참고,      https://developers.kakao.com/docs/latest/ko/kakaologin/android#set-redirect-uri-->
+<!--        <meta-data-->
+<!--            android:name="com.kakao.sdk.AppKey"-->
+<!--            android:value="네이티브앱키" />-->
+
 
         <activity
             android:name=".fragmentversionui.MainFragmentActivity"
