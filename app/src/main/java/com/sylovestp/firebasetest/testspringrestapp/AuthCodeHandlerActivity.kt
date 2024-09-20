@@ -18,7 +18,11 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
 
     private val mCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
+
             Log.e(TAG, "로그인 실패 $error")
+//            if (error.toString().contains("statusCode=302")){
+//                loginWithKakaoAccount()
+//            }
         } else if (token != null) {
             Log.e(TAG, "로그인 성공 ${token.accessToken}")
         }
@@ -34,21 +38,33 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
                 // 로그인 실패 부분
                 if (error != null) {
                     Log.e(TAG, "로그인 실패 $error")
+//                    if (error.toString().contains("statusCode=302")){
+//                        loginWithKakaoAccount()
+//                    }
+
                     // 사용자가 취소
+
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
                     }
+
                     // 다른 오류
                     else {
                         UserApiClient.instance.loginWithKakaoAccount(
                             this,
                             callback = mCallback
                         ) // 카카오 이메일 로그인
+                        Log.i("lsy", "카카오톡으로 로그인 성공15 loginWithKakaoAccount")
+                        startActivity(Intent(this, MainFragmentActivity::class.java))
+                        finish()
                     }
                 }
                 // 로그인 성공 부분
                 else if (token != null) {
                     Log.e(TAG, "로그인 성공 ${token.accessToken}")
+                    Log.i("lsy", "카카오톡으로 로그인 성공14 loginWithKakaoAccount")
+                    startActivity(Intent(this, MainFragmentActivity::class.java))
+                    finish()
                 }
             }
         } else {
@@ -57,5 +73,9 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
             startActivity(Intent(this, MainFragmentActivity::class.java))
             finish()
         }
+    } // onCreate
+
+    private fun loginWithKakaoAccount(){
+        UserApiClient.instance.loginWithKakaoAccount(this, callback = mCallback)
     }
 }

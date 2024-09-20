@@ -124,8 +124,8 @@ class FragmentOne : Fragment() {
         binding.userEmail.text = userEmail
 
 // 이미지 URL 설정
-        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
-//        val imageUrl = "http://10.100.201.87:8080/api/users/${userProfileImageId}/profileImage"
+//        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
+        val imageUrl = "http://10.100.201.87:8080/api/users/${userProfileImageId}/profileImage"
 
         Glide.with(requireContext())
             .load(imageUrl)

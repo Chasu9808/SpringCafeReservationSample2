@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
+    <!--자기꺼 네이티브앱키 여기서는 앞에 kakao 붙이기-->
+    <!--                data android:host="oauth"-->
+    <!--                android:scheme="kakao네이티브 앱 키"-->
     <application
         android:name=".retrofit.MyApplication"
         android:allowBackup="true"
@@ -27,15 +30,19 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-<!--자기꺼 네이티브앱키 여기서는 앞에 kakao 붙이기-->
+
             <data android:host="oauth"
                 android:scheme="kakao네이티브 앱 키" />
+
             </intent-filter>
         </activity>
 
+<!--        <meta-data-->
+<!--            android:name="com.kakao.sdk.AppKey"-->
+<!--            android:value="네이티브앱키" />-->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="네이티브앱키" />
+            android:value="네이티브 앱 키" />
 
         <activity
             android:name=".fragmentversionui.MainFragmentActivity"

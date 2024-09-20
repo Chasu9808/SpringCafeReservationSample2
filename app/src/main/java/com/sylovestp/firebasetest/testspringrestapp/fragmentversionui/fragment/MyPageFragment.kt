@@ -110,8 +110,8 @@ class MyPageFragment : Fragment() {
         val userAddress = sharedPreferences.getString("address", null)
 
         val userProfileImageId = sharedPreferences.getLong("id", 0)
-//        val imageUrl = "http://10.100.201.87:8080/api/users/${userProfileImageId}/profileImage"
-        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
+        val imageUrl = "http://10.100.201.87:8080/api/users/${userProfileImageId}/profileImage"
+//        val imageUrl = "http://192.168.219.200:8080/api/users/${userProfileImageId}/profileImage"
         Glide.with(requireContext())
             .load(imageUrl)
             .apply(RequestOptions().circleCrop())
