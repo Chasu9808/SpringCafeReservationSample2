@@ -141,12 +141,19 @@ class JoinFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val userDTO = UserDTO(username, name, password, email, phone, fullAddress)
+            val userDTO = UserDTO(username, name, password, email, phone, fullAddress,null,null)
 
 
             Toast.makeText(requireContext(), "$username, $password, $email, $imageUri", Toast.LENGTH_SHORT).show()
 
-            imageUri?.let { uri -> processImage(userDTO, uri) }
+            // 이미지가 있는 경우, 없는 경우
+            imageUri?.let { uri ->
+                // imageUri가 null이 아닐 경우
+                processImage(userDTO, uri)
+            } ?: run {
+                // imageUri가 null일 경우
+                processImage2(userDTO)
+            }
         }
 
         binding.loginBtn.setOnClickListener {
@@ -228,6 +235,32 @@ class JoinFragment : Fragment() {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Error processing image", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // imageUri가 null일 때 호출되는 함수
+    private fun processImage2(userDTO: UserDTO) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val userRequestBody = createRequestBodyFromDTO(userDTO)
+
+                // 파일 없이 JSON 데이터만 전송
+                uploadData(userRequestBody, null)
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Data processed successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Error processing data", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }

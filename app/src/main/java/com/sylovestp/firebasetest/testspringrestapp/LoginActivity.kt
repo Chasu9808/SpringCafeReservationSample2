@@ -128,7 +128,7 @@ class LoginActivity : AppCompatActivity() {
                         UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                         Log.i("lsy", "카카오톡으로 로그인 성공 11 loginWithKakaoAccount")
                     } else if (token != null) {
-                        Log.i("lsy", "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        Log.i("lsy", "카카오톡으로 로그인 성공 13 ${token.accessToken}")
                         getUserInfo()
                         startActivity(Intent(this, MainFragmentActivity::class.java))
                         finish()
@@ -185,6 +185,10 @@ class LoginActivity : AppCompatActivity() {
                 Log.i("lsy KakaoLogin", "이메일: ${user.kakaoAccount?.email}")
                 Log.i("lsy KakaoLogin", "프로필 사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
                 // 여기서 사용자 정보를 이용해 추가적인 작업 수행
+                //회원 가입, 패스워드 : 1111
+
+                // 로그인
+
             }
         }
     }

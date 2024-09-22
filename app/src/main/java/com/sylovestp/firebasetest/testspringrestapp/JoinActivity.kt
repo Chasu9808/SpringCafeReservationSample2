@@ -1,5 +1,8 @@
 package com.sylovestp.firebasetest.testspringrestapp
 
+import android.app.Activity
+import android.app.ProgressDialog.show
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -12,6 +15,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -45,6 +50,8 @@ class JoinActivity : AppCompatActivity() {
     private var imageUri: Uri? = null  // Nullable URI
     // ActivityResultLauncher 선언
     private lateinit var addressFinderLauncher: ActivityResultLauncher<Bundle>
+
+
 
     private val selectImageLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -95,12 +102,20 @@ class JoinActivity : AppCompatActivity() {
             val address = binding.userAddress.text.toString()
             val detailAddress = binding.userAddressDetail.text.toString()
             val fullAddress =  address + " " + detailAddress
-            val userDTO = UserDTO(username,name,password,email,phone,fullAddress)
+            val userDTO = UserDTO(username,name,password,email,phone,fullAddress,null,null)
             Toast.makeText(this@JoinActivity, "${username}, ${password},${email}, ${imageUri}", Toast.LENGTH_SHORT).show()
             if (userDTO != null) {
                 // 회원가입시,
                 //
-                imageUri?.let { it1 -> processImage(userDTO, it1) }
+//                imageUri?.let { it1 -> processImage(userDTO, it1) }
+                // 이미지가 있는 경우, 없는 경우
+                imageUri?.let { uri ->
+                    // imageUri가 null이 아닐 경우
+                    processImage(this,userDTO, uri)
+                } ?: run {
+                    // imageUri가 null일 경우
+                    processImage2(this,userDTO)
+                }
             }
         }
 
@@ -133,87 +148,118 @@ class JoinActivity : AppCompatActivity() {
 
     } //onCreate
 
-    private fun uploadData(user: RequestBody, profileImage: MultipartBody.Part?) {
-        val networkService = (applicationContext as MyApplication).networkService
-        val call = networkService.registerUser(user, profileImage)
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(this@JoinActivity, "User created successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@JoinActivity, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Toast.makeText(this@JoinActivity, "Failed to create user: ${response.code()}", Toast.LENGTH_SHORT).show()
-                }
-            }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@JoinActivity, "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun createRequestBodyFromDTO(userDTO: UserDTO): RequestBody {
-        val gson = Gson()
-        val json = gson.toJson(userDTO)
-        return json.toRequestBody("application/json".toMediaTypeOrNull())
-    }
-
-    private fun createMultipartBodyFromBytes(imageBytes: ByteArray): MultipartBody.Part {
-        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageBytes)
-        return MultipartBody.Part.createFormData("profileImage", "image.jpg", requestFile)
-    }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         selectImageLauncher.launch(intent)
     }
 
-    private fun processImage(userDTO: UserDTO, uri: Uri) {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                // 1. JSON 데이터 생성
-                val userRequestBody = createRequestBodyFromDTO(userDTO)
+    companion object {
+        fun processImage(activity: Activity, userDTO: UserDTO, uri: Uri) {
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    // 1. JSON 데이터 생성
+                    val userRequestBody = createRequestBodyFromDTO(userDTO)
 
-                // 2. 이미지 축소 및 MultipartBody.Part 생성
-                val resizedBitmap = getResizedBitmap(uri, 200, 200) // 200x200 크기로 축소
-                val imageBytes = bitmapToByteArray(resizedBitmap)
-                val profileImagePart = createMultipartBodyFromBytes(imageBytes)
+                    // 2. 이미지 축소 및 MultipartBody.Part 생성
+                    val resizedBitmap = getResizedBitmap(activity,uri, 200, 200) // 200x200 크기로 축소
+                    val imageBytes = bitmapToByteArray(resizedBitmap)
+                    val profileImagePart = createMultipartBodyFromBytes(imageBytes)
 
-                // 3. 서버로 전송
-                uploadData(userRequestBody, profileImagePart)
+                    // 3. 서버로 전송
+                    uploadData(activity,userRequestBody, profileImagePart)
 
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@JoinActivity, "Image processed successfully", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@JoinActivity, "Error processing image", Toast.LENGTH_SHORT).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(activity, "Image processed successfully", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(activity, "Error processing image", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        } // processImage
+
+        // imageUri가 null일 때 호출되는 함수
+        fun processImage2(activity: Activity,userDTO: UserDTO) {
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val userRequestBody = createRequestBodyFromDTO(userDTO)
+
+                    // 파일 없이 JSON 데이터만 전송
+                    uploadData(activity,userRequestBody, null)
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            activity,
+                            "Data processed successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(activity, "Error processing data", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        } //processImage2
+
+        fun uploadData(activity: Activity, user: RequestBody, profileImage: MultipartBody.Part?) {
+            val networkService = (activity.applicationContext as MyApplication).networkService
+            val call = networkService.registerUser(user, profileImage)
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(activity, "User created successfully", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity, LoginActivity::class.java)
+                        activity.startActivity(intent)
+                        activity.finish()
+                    } else {
+                        Toast.makeText(activity, "Failed to create user: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(activity, "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
-    }
 
-    private suspend fun getResizedBitmap(uri: Uri, width: Int, height: Int): Bitmap {
-        return withContext(Dispatchers.IO) {
-            val futureTarget: FutureTarget<Bitmap> = Glide.with(this@JoinActivity)
-                .asBitmap()
-                .load(uri)
-                .override(width, height)  // 지정된 크기로 축소
-                .submit()
-
-            // Bitmap을 반환
-            futureTarget.get()
+        fun createRequestBodyFromDTO(userDTO: UserDTO): RequestBody {
+            val gson = Gson()
+            val json = gson.toJson(userDTO)
+            return json.toRequestBody("application/json".toMediaTypeOrNull())
         }
-    }
 
-    fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream) // 압축 품질을 80%로 설정
-        return byteArrayOutputStream.toByteArray()
-    }
+        fun createMultipartBodyFromBytes(imageBytes: ByteArray): MultipartBody.Part {
+            val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageBytes)
+            return MultipartBody.Part.createFormData("profileImage", "image.jpg", requestFile)
+        }
+
+        private suspend fun getResizedBitmap(context: Context,uri: Uri, width: Int, height: Int): Bitmap {
+            return withContext(Dispatchers.IO) {
+                val futureTarget: FutureTarget<Bitmap> = Glide.with(context)
+                    .asBitmap()
+                    .load(uri)
+                    .override(width, height)  // 지정된 크기로 축소
+                    .submit()
+
+                // Bitmap을 반환
+                futureTarget.get()
+            }
+        }
+
+        fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream) // 압축 품질을 80%로 설정
+            return byteArrayOutputStream.toByteArray()
+        }
+
+    } //companion
 
 
 }

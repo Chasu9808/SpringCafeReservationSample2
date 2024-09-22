@@ -5,6 +5,8 @@ data class UserDTO(
     val name: String,
     val password: String,
     val email: String,
-    val phone: String,
-    val address: String,
+    val phone: String?,
+    val address: String?,
+    val social: Boolean?,
+    val profileImageServer: String?
 )
