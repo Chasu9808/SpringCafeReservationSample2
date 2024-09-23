@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ItemViewBinding
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserItem
@@ -42,6 +43,8 @@ class MyAdapterRetrofit(val context: Context, val datas: List<UserItem>?)
             .override(300,300)
             .placeholder(R.drawable.test) // 이미지 로드 중에 표시할 플레이스홀더
             .error(R.drawable.user_basic) // 로드 실패 시 표시할 이미지
+            .skipMemoryCache(true)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(binding.itemProfileImage)
     }
 
