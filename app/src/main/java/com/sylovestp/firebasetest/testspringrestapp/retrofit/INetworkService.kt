@@ -77,4 +77,8 @@ interface INetworkService {
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Response<PageResponse<ItemListDTO>>
+
+    //아이디 중복 검사
+    @POST("/public/users/check-username")
+    suspend fun checkUsername(@Body request: Map<String?, String?>?): Response<MutableMap<String?, Boolean?>?>
 }

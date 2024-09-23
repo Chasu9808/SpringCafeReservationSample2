@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -18,12 +19,17 @@ import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityLoginBinding
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ActivityMainBinding
+import com.sylovestp.firebasetest.testspringrestapp.dto.UserDTO
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.repository.LoginRepository
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
 import com.sylovestp.firebasetest.testspringrestapp.viewModel.LoginViewModel
 import com.sylovestp.firebasetest.testspringrestapp.viewModelFactory.LoginViewModelFactory
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var apiService: INetworkService
@@ -44,7 +50,9 @@ class LoginActivity : AppCompatActivity() {
         val myApplication = applicationContext as MyApplication
         val myApplication2 = applicationContext as MyApplication
         myApplication.initialize(this)
+        // 헤더에 토큰 붙이기 전
         apiService = myApplication.getApiService()
+        // 헤더에 토큰 붙이기 후
         apiService2 = myApplication2.networkService
 
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -108,7 +116,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         //카카오 로그인
-        binding.kakaoLogin.setOnClickListener{
+        binding.kakaoLogin.setOnClickListener {
             // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
@@ -126,17 +134,22 @@ class LoginActivity : AppCompatActivity() {
 
                         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                         UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+//                        getUserInfo()
+//                        startActivity(Intent(this, MainFragmentActivity::class.java))
+//                        finish()
                         Log.i("lsy", "카카오톡으로 로그인 성공 11 loginWithKakaoAccount")
                     } else if (token != null) {
                         Log.i("lsy", "카카오톡으로 로그인 성공 13 ${token.accessToken}")
-                        getUserInfo()
-                        startActivity(Intent(this, MainFragmentActivity::class.java))
-                        finish()
+//                        getUserInfo()
+//                        startActivity(Intent(this, MainFragmentActivity::class.java))
+//                        finish()
                     }
                 }
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
-                getUserInfo()
+//                getUserInfo()
+//                startActivity(Intent(this, MainFragmentActivity::class.java))
+//                finish()
                 Log.i("lsy", "카카오톡으로 로그인 성공 12 loginWithKakaoAccount")
 
             }
@@ -159,21 +172,19 @@ class LoginActivity : AppCompatActivity() {
         } else if (token != null) {
             Log.i("lsy", "카카오계정으로 로그인 성공 ${token.accessToken}")
             // 성공시 이동할 화면.
-
-            startActivity(Intent(this, MainFragmentActivity::class.java))
-            finish()
+            getUserInfo()
+//            startActivity(Intent(this, MainFragmentActivity::class.java))
+//            finish()
 
         }
     }
 
-    private fun loginWithKakaoAccount(){
-        UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
-    }
 
     private val loginViewModel: LoginViewModel by viewModels {
         val loginRepository = LoginRepository(apiService, sharedPreferences)
         LoginViewModelFactory(loginRepository)
     }
+
     // 사용자 정보 요청 함수
     private fun getUserInfo() {
         UserApiClient.instance.me { user, error ->
@@ -185,11 +196,59 @@ class LoginActivity : AppCompatActivity() {
                 Log.i("lsy KakaoLogin", "이메일: ${user.kakaoAccount?.email}")
                 Log.i("lsy KakaoLogin", "프로필 사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
                 // 여기서 사용자 정보를 이용해 추가적인 작업 수행
-                //회원 가입, 패스워드 : 1111
+                val email: String? = user.kakaoAccount?.email ?: null
+                val nickname: String? = user.kakaoAccount?.profile?.nickname ?: null
+                val profileImg: String? = user.kakaoAccount?.profile?.thumbnailImageUrl ?: null
 
-                // 로그인
+                val userDTO =
+                            UserDTO(email, nickname, "1111", email, null, null, true, profileImg)
+
+
+                // 회원 존재 유무에 따라서
+                    lifecycleScope.launch {
+                        val isAvailable = checkUsernameAvailability(userDTO) // 비동기 함수 호출
+                        if (isAvailable) {
+                            // 회원가입 로직 실행
+                            Log.i("lsy KakaoLogin", "사용자 정보가 존재하지 않음, 회원가입 진행")
+                            // 예: 회원가입 API 호출
+                            JoinActivity.processImage2(this@LoginActivity,userDTO)
+
+                        } else {
+                            // 로그인 로직 실행
+                            Log.i("lsy KakaoLogin", "사용자 정보가 이미 존재함, 로그인 진행")
+                            Log.i("lsy email", "${email}")
+                            if (email != null) {
+                                loginViewModel.login(email, "1111")
+                            }
+                            // 예: 로그인 API 호출
+                        }
+                    }
 
             }
+        }
+    }//
+
+
+    suspend fun checkUsernameAvailability(userDTO: UserDTO): Boolean {
+        // 요청 파라미터로 사용할 Map 생성
+        val request: Map<String?, String?> = mapOf("username" to userDTO.username)
+
+        return try {
+            // Retrofit 호출
+            val response = apiService.checkUsername(request)
+            if (response.isSuccessful) {
+                val result = response.body()
+                result?.let {
+                    val isAvailable = it["available"]
+                    return isAvailable == true // true 또는 false 반환
+                } ?: false // 결과가 null일 경우 false 반환
+            } else {
+                Log.e("Retrofit", "Response error: ${response.code()}")
+                false // 서버 오류 시 false 반환
+            }
+        } catch (e: Exception) {
+            Log.e("Retrofit", "Request failed: ${e.message}")
+            false // 예외 발생 시 false 반환
         }
     }
 
