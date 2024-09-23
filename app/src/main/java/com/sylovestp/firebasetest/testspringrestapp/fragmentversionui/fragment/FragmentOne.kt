@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.kakao.sdk.user.UserApiClient
 import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
 import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
@@ -145,9 +146,32 @@ class FragmentOne : Fragment() {
                 .setPositiveButton("확인") { dialog, _ ->
                     // 확인 버튼 클릭 시 로그아웃 처리
                     val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                    // SharedPreferences에서 "jwt_token"이라는 키로 저장된 토큰을 가져옴
+                    val socialCheckString = sharedPreferences.getString("social", "false")
+                    val socialCheck = socialCheckString?.toBoolean() ?: false
+
 
                     // SharedPreferences 값 삭제
                     sharedPreferences.edit().clear().apply()
+
+                    Log.d("lsy"," social check : ${socialCheck}")
+                    if (socialCheck){
+                        // 카카오 로그 아웃.
+                        UserApiClient.instance.logout { error ->
+                            if (error != null) {
+                                Log.e("lsy KakaoLogout", "로그아웃 실패. 이유: $error")
+                            } else {
+                                Log.i("lsy KakaoLogout", "로그아웃 성공")
+                                // 로그인 액티비티로 이동
+                                val intent = Intent(requireContext(), LoginActivity::class.java)
+                                startActivity(intent)
+
+                                // 현재 액티비티 종료
+                                requireActivity().finish()
+                            }
+                        }
+                    }
+
 
                     // 로그인 액티비티로 이동
                     val intent = Intent(requireContext(), LoginActivity::class.java)

@@ -6,6 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.ItemListViewBinding
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.dto.ItemListDTO
@@ -40,10 +41,12 @@ class ItemListAdapter : PagingDataAdapter<ItemListDTO, ItemListAdapter.ItemListV
             binding.itemDescription.text = item.description
 
 //            val imageUrl = "http://10.100.201.87:8080/items/${item.itemRepImageId}/itemImageObjectId"
-            val imageUrl = "http://http://192.168.219.200:8080/items/${item.itemRepImageId}/itemImageObjectId"
+            val imageUrl = "http://192.168.219.200:8080/items/${item.itemRepImageId}/itemImageObjectId"
             Glide.with(binding.root.context)
                 .load(imageUrl)
                 .placeholder(R.drawable.user_basic)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.item2RepImage)
         }
     }
