@@ -18,103 +18,99 @@
     <LinearLayout
         android:layout_width="250dp"
         android:layout_height="300dp"
-        android:orientation="vertical"
-        android:layout_marginLeft="10dp">
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/item2_reservationId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="reservationId"
-            android:textStyle="bold"
             android:textSize="15sp"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/item2_reservationItemId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="reservationItemId"
-            android:textStyle="bold"
-            android:textSize="15sp"
             android:layout_marginTop="5dp"
-            />
+            android:text="reservationItemId"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <!-- reservationDate -->
         <TextView
             android:id="@+id/item2_reservationDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="reservationDate"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
         <!-- reservationTime -->
         <TextView
             android:id="@+id/item_reservationTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="reservationTime"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
         <!-- username -->
         <TextView
             android:id="@+id/item_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="username"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
         <!-- phone -->
         <TextView
             android:id="@+id/item_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="phone"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
         <!-- address -->
         <TextView
             android:id="@+id/item_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="address"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
         <!-- name -->
         <TextView
             android:id="@+id/item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="name"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
         <!-- price -->
         <TextView
             android:id="@+id/item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="price"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
         <!-- description -->
         <TextView
             android:id="@+id/item_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="description"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>
