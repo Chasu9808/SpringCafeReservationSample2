@@ -37,6 +37,7 @@ class ItemListAdapter : PagingDataAdapter<ItemListDTO, ItemListAdapter.ItemListV
             binding.itemPhone.text = item.phone
             binding.itemAddress.text = item.address
             binding.itemName.text = item.name
+            binding.reservationItemPayStatus.text = item.payStatus
             binding.itemPrice.text = item.price.toString()
             binding.itemDescription.text = item.description
 

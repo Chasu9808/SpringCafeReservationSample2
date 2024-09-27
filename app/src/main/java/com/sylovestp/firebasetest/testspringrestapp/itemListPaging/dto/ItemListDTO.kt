@@ -13,6 +13,7 @@ data class ItemListDTO (
     val phone: String,
     val address: String,
     val name: String, // 이름 : 이상용
+    val payStatus: String,
     val price: BigDecimal,
     val description: String,
     val itemRepImageId: String,

@@ -92,6 +92,15 @@
             android:text="name"
             android:textSize="15sp" />
 
+        <!-- payStatus -->
+        <TextView
+            android:id="@+id/reservation_item_payStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="payStatus"
+            android:textSize="15sp" />
+
         <!-- price -->
         <TextView
             android:id="@+id/item_price"
