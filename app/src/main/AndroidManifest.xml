@@ -25,7 +25,7 @@
         tools:targetApi="31" >
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="네이티브 앱 키" />
+            android:value="96f1" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -36,7 +36,7 @@
 
                 <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
                 <data android:host="oauth"
-                    android:scheme="kakao네이티브 앱 키" />
+                    android:scheme="kakao9" />
             </intent-filter>
         </activity>
 <!--공식 문서 참고,      https://developers.kakao.com/docs/latest/ko/kakaologin/android#set-redirect-uri-->

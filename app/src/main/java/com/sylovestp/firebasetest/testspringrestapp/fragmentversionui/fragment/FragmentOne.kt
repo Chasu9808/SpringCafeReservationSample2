@@ -15,12 +15,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.kakao.sdk.user.UserApiClient
-import com.sylovestp.firebasetest.testspringrestapp.AiPredictActivity
 import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentOneBinding
-import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerAdapter
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerOneFragmentAdapter
+import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.ui.ReservationItemListFragment
 import com.sylovestp.firebasetest.testspringrestapp.pay.ui.MainActivity
 
 class FragmentOne : Fragment() {

@@ -1,15 +1,12 @@
-package com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment
+package com.sylovestp.firebasetest.testspringrestapp.itemListPaging.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationItemListBinding
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.adapter.ItemListAdapter
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.factory.ItemListViewModelFactory
