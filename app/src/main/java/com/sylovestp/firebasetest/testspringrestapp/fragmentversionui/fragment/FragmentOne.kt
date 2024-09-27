@@ -21,6 +21,7 @@ import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentOneBindi
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerOneFragmentAdapter
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.ui.ReservationItemListFragment
 import com.sylovestp.firebasetest.testspringrestapp.pay.ui.MainActivity
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.ui.ReservationListFragment
 
 class FragmentOne : Fragment() {
     private lateinit var binding: FragmentOneBinding
@@ -90,11 +91,20 @@ class FragmentOne : Fragment() {
             startActivity(intent)
         }
 
-        // reservationListIcon 클릭 시 ReservationItemListFragment 이동하는 코드
+        // 예약 현황 조회
         binding.reservationListIcon.setOnClickListener {
             // 프래그먼트 전환을 위한 FragmentTransaction 사용
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ReservationItemListFragment()) // ReservationItemListFragment 전환
+                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
+                .commit()
+        }
+
+        // 예약하기 -> 상품 조회
+        binding.reservateItemIcon.setOnClickListener {
+            // 프래그먼트 전환을 위한 FragmentTransaction 사용
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ReservationListFragment()) // ReservationItemListFragment 전환
                 .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
                 .commit()
         }

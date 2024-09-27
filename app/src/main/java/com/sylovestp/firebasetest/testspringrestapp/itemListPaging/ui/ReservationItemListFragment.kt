@@ -55,9 +55,4 @@ class ReservationItemListFragment : Fragment() {
         })
     }
 
-    private fun enableEdgeToEdge() {
-        // Edge-to-Edge UI를 설정하는 메서드
-        // WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)와 같은 코드를 넣을 수 있습니다.
-    }
-
 }

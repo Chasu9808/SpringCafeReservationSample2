@@ -6,6 +6,7 @@ import com.sylovestp.firebasetest.testspringrestapp.dto.PageResponse
 import com.sylovestp.firebasetest.testspringrestapp.dto.PredictionResult
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserItem
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.dto.ItemListDTO
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationListDTO
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -87,6 +88,13 @@ interface INetworkService {
         @Query("size") size: Int,
         @Query("username") username: String // username 파라미터 추가
     ): Response<PageResponse<ItemListDTO>>
+
+    // 상품 조회
+    @GET("/api/items/page")
+    suspend fun getItemsList(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Response<PageResponse<ReservationListDTO>>
 
     //아이디 중복 검사
     @POST("/public/users/check-username")
