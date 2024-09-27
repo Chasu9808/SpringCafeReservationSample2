@@ -1,20 +1,26 @@
 package com.sylovestp.firebasetest.testspringrestapp.itemListPaging.pagingSource
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingSource.LoadParams
 import androidx.paging.PagingSource.LoadResult
 import androidx.paging.PagingState
+import com.iamport.sdk.domain.core.Iamport.response
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserItem
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.dto.ItemListDTO
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
+import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
 
 class ItemListPagingSource (
     private val apiService: INetworkService
     // Int는 페이지 번호의 타입
     // UserItem은 페이징 소스에서 반환할 데이터 타입
     ) : PagingSource<Int, ItemListDTO>() {
+        // 일반 코틀린 클래스 전역으로 이용해서 사용하기
+    private val sharedPreferences = MyApplication.instance.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
-        //oad 함수는 PagingSource에서 데이터를 비동기로 로드하는 핵심 메서드
+        //load 함수는 PagingSource에서 데이터를 비동기로 로드하는 핵심 메서드
         // 데이터를 가져오는 동안 코루틴이 중단될 수 있으므로 suspend 키워드가 사용됩니다
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ItemListDTO> {
             return try {
@@ -22,10 +28,18 @@ class ItemListPagingSource (
                 val currentPage = params.key ?: 0
                 // 페이지 크기를 10으로 설정
                 // interface INetworkService getItemList 추가
-                val response = apiService.getItemList(currentPage, 10)
 
-                if (response.isSuccessful) {
-                    val data = response.body()?.content ?: emptyList()
+                // username 가져오기
+                val username = sharedPreferences.getString("username", "username")
+
+                // 전체 예약 현황 조회
+//                val response = apiService.getItemList(currentPage, 10)
+
+                // 나의 예약 현황 조회
+                val response = username?.let { apiService.getItemListMypage(currentPage, 10, it) }
+
+                if (response?.isSuccessful == true) {
+                    val data = response?.body()?.content ?: emptyList()
                     val nextPage = if (data.isNotEmpty()) currentPage + 1 else null
 
                     LoadResult.Page(

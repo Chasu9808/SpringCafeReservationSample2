@@ -15,18 +15,25 @@ class MyApplication : Application(){
     private lateinit var retrofit_token: Retrofit
     private lateinit var apiService: INetworkService
 
+    companion object {
+        lateinit var instance: MyApplication
+            private set
+    }
+
+
     override fun onCreate() {
         super.onCreate()
 
         // Kakao Sdk 초기화
 //        KakaoSdk.init(this, "네이티브 앱 키")
-        KakaoSdk.init(this, "네이티브 앱 키")
+        instance = this
+
 
     }
 
     // http 퍼미션 허용 및, 로컬호스트 안될시 아이피로 확인 하기.
-    val BASE_URL = "http://10.100.201.87:8080"
-//    val BASE_URL = "http://192.168.219.200:8080"
+//    val BASE_URL = "http://10.100.201.87:8080"
+    val BASE_URL = "http://192.168.219.200:8080"
 
     //add....................................
     var networkService: INetworkService
