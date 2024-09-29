@@ -458,4 +458,6 @@ class MyPageFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
         return byteArrayOutputStream.toByteArray()
     }
+
+
 }

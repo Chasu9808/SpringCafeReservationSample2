@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -49,12 +50,12 @@ class MainFragmentActivity : AppCompatActivity() {
         // TabLayout의 탭 선택 리스너 설정
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                val selectedFragment = when (tab.position) {
-                    0 -> FragmentOne()
-                    1 -> FragmentTwo()
-                    2 -> FragmentThree()
-                    3 -> FragmentFour()
-                    else -> FragmentOne()
+                when (tab?.position) {
+                    0 -> navigateToFragment(FragmentOne(), false) // Fragment A로 이동
+                    1 -> navigateToFragment(FragmentTwo(), false) // Fragment B로 이동
+                    2 -> navigateToFragment(FragmentThree(), false) // Fragment C로 이동
+                    3 -> navigateToFragment(FragmentFour(), false) // Fragment D로 이동
+
                 }
 
                 // 선택된 탭에 따라 아이콘 변경
@@ -65,10 +66,7 @@ class MainFragmentActivity : AppCompatActivity() {
                     3 -> tab.setIcon(R.drawable.photo_album_24px_fill)
                 }
 
-                // 프래그먼트 전환
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, selectedFragment)
-                    .commit()
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -88,7 +86,33 @@ class MainFragmentActivity : AppCompatActivity() {
             }
         })
 
+        // 초기 화면으로 Fragment A 설정
+        if (savedInstanceState == null) {
+            navigateToFragment(FragmentOne(), false)
+        }
 
     } //onCreate
+
+    // 프래그먼트를 교체하는 메서드
+    fun navigateToFragment(fragment: Fragment, useBackStack: Boolean) {
+        val transaction = supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment) // 프래그먼트 교체
+
+        if (useBackStack) {
+            transaction.addToBackStack(null) // 백스택에 추가
+        }
+
+        transaction.commit()
+    }
+
+    // 뒤로 가기 버튼 처리
+    override fun onBackPressed() {
+        // 백스택에 항목이 있으면 pop, 없으면 기본 동작 수행
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed() // 기본 뒤로 가기 버튼 동작
+        }
+    }
 
 }

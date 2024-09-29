@@ -90,7 +90,7 @@ class ReservationListFragment : Fragment() {
 
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragmentB)
-            .addToBackStack(null)
+//            .addToBackStack(null)
             .commit()
     }
 

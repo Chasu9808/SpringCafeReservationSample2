@@ -70,4 +70,6 @@ class MobileWebViewModeFragment : Fragment() {
             Log.e("WebViewMode", "돌아갈 수 없습니다.")
         }
     }
+
+
 }

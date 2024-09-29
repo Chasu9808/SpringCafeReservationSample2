@@ -18,6 +18,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentOneBinding
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.adapter.ViewPagerOneFragmentAdapter
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.ui.ReservationItemListFragment
 import com.sylovestp.firebasetest.testspringrestapp.pay.ui.MainActivity
@@ -45,38 +46,24 @@ class FragmentOne : Fragment() {
 
         // user_login_icon 클릭 시 LoginFragment로 이동하는 코드
         binding.userLoginIcon.setOnClickListener {
-            // 프래그먼트 전환을 위한 FragmentTransaction 사용
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LoginFragment()) // LoginFragment로 전환
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
-                .commit()
+            // 백스택에 추가하지 않고 Fragment B로 이동
+            (activity as MainFragmentActivity).navigateToFragment(LoginFragment(), false)
         }
 
         // user_join_icon 클릭 시 JoinFragment로 이동하는 코드
         binding.userJoinIcon.setOnClickListener {
-            // 프래그먼트 전환을 위한 FragmentTransaction 사용
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, JoinFragment()) // JoinFragment로 전환
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
-                .commit()
+            // 백스택에 추가하지 않고 Fragment B로 이동
+            (activity as MainFragmentActivity).navigateToFragment(JoinFragment(), false)
         }
 
         // user_paging_icon 클릭 시 UserRecyclerViewFragment 이동하는 코드
         binding.userPagingIcon.setOnClickListener {
-            // 프래그먼트 전환을 위한 FragmentTransaction 사용
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, UserRecyclerViewFragment()) // UserRecyclerViewFragment 전환
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
-                .commit()
+            (activity as MainFragmentActivity).navigateToFragment(UserRecyclerViewFragment(), false)
         }
 
         // ai_Image_Classify_icon 클릭 시 AiPredictFragment 이동하는 코드
         binding.aiImageClassifyIcon.setOnClickListener {
-            // 프래그먼트 전환을 위한 FragmentTransaction 사용
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, AiPredictFragment()) // AiPredictFragment 전환
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
-                .commit()
+            (activity as MainFragmentActivity).navigateToFragment(AiPredictFragment(), false)
         }
 
         // payTestIcon 클릭 시 , 결제 액티비티로 MainActivity 이동하는 코드
@@ -93,29 +80,24 @@ class FragmentOne : Fragment() {
 
         // 예약 현황 조회
         binding.reservationListIcon.setOnClickListener {
-            // 프래그먼트 전환을 위한 FragmentTransaction 사용
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ReservationItemListFragment()) // ReservationItemListFragment 전환
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
-                .commit()
+            (activity as MainFragmentActivity).navigateToFragment(ReservationItemListFragment(), false)
+
         }
 
         // 예약하기 -> 상품 조회
         binding.reservateItemIcon.setOnClickListener {
-            // 프래그먼트 전환을 위한 FragmentTransaction 사용
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ReservationListFragment()) // ReservationItemListFragment 전환
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
-                .commit()
+            (activity as MainFragmentActivity).navigateToFragment(ReservationListFragment(), false)
         }
 
         // 마이페이지 이동하는 코드
         binding.userProfileImage.setOnClickListener {
             // 프래그먼트 전환을 위한 FragmentTransaction 사용
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, MyPageFragment()) // ReservationItemListFragment 전환
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
-                .commit()
+            // 샘플 하나
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, MyPageFragment()) // ReservationItemListFragment 전환
+//                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
+//                .commit()
+            (activity as MainFragmentActivity).navigateToFragment(MyPageFragment(), false)
         }
 
         // SharedPreferences 객체를 가져옴

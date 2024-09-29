@@ -60,4 +60,24 @@ class ReservationDetailFragment : Fragment() {
             .into(binding.itemAddImage4)
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        // 프래그먼트가 pause 상태에 들어갔을 때 해당 프래그먼트를 종료하는 코드
+        parentFragmentManager.beginTransaction()
+            .remove(this)
+            .commitAllowingStateLoss()
+    }
+
+    // 또는 onStop에서 프래그먼트를 종료하려면 아래 코드 사용
+    override fun onStop() {
+        super.onStop()
+
+        // 프래그먼트가 stop 상태에 들어갔을 때 해당 프래그먼트를 종료하는 코드
+        parentFragmentManager.beginTransaction()
+            .remove(this)
+            .commitAllowingStateLoss()
+    }
+
+
 }
