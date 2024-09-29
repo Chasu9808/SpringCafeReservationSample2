@@ -52,9 +52,9 @@ class MainFragmentActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab?.position) {
                     0 -> navigateToFragment(FragmentOne(), false) // Fragment A로 이동
-                    1 -> navigateToFragment(FragmentTwo(), false) // Fragment B로 이동
-                    2 -> navigateToFragment(FragmentThree(), false) // Fragment C로 이동
-                    3 -> navigateToFragment(FragmentFour(), false) // Fragment D로 이동
+                    1 -> navigateToFragment(FragmentTwo(), true) // Fragment B로 이동
+                    2 -> navigateToFragment(FragmentThree(), true) // Fragment C로 이동
+                    3 -> navigateToFragment(FragmentFour(), true) // Fragment D로 이동
 
                 }
 
@@ -107,12 +107,15 @@ class MainFragmentActivity : AppCompatActivity() {
 
     // 뒤로 가기 버튼 처리
     override fun onBackPressed() {
-        // 백스택에 항목이 있으면 pop, 없으면 기본 동작 수행
-        if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack()
+        // 현재 활성화된 프래그먼트가 Fragment A 인지 확인
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (fragment is FragmentOne) {
+            // Fragment A에 정의된 뒤로 가기 처리를 호출
+            fragment.handleBackPressed()
         } else {
-            super.onBackPressed() // 기본 뒤로 가기 버튼 동작
+            super.onBackPressed() // 다른 프래그먼트에서는 기본 동작 수행
         }
     }
+
 
 }

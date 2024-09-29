@@ -215,4 +215,18 @@ class FragmentOne : Fragment() {
         handler.postDelayed(runnable, slideInterval)
     }
 
+    // 뒤로 가기 버튼을 눌렀을 때 호출되는 메서드
+    fun handleBackPressed() {
+        // 확인 대화 상자 표시
+        AlertDialog.Builder(requireContext())
+            .setTitle("뒤로 가기")
+            .setMessage("이 화면을 종료하시겠습니까?")
+            .setPositiveButton("예") { _, _ ->
+                // "예"를 선택하면 프래그먼트 종료
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+            .setNegativeButton("아니요", null) // "아니요"를 선택하면 아무 동작도 하지 않음
+            .show()
+    }
+
 }
