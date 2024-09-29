@@ -14,6 +14,7 @@ import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.adapter.ItemL
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.factory.ItemListViewModelFactory
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.viewModel.ItemListViewModel
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.adapter.ReservationListAdapter
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationListDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.factory.ReservationListViewModelFactory
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.viewModel.ReservationListViewModel
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
@@ -48,14 +49,49 @@ class ReservationListFragment : Fragment() {
             .get(ReservationListViewModel::class.java)
 
         // RecyclerView 어댑터 설정
-        adapter = ReservationListAdapter()
+//        adapter = ReservationListAdapter()
+        //수정된 코드
+        // 어댑터 설정 및 클릭 리스너에서 데이터 처리
+        adapter = ReservationListAdapter { item ->
+            // 클릭된 아이템 데이터를 프래그먼트 A에서 처리
+            navigateToFragmentB(item)
+        }
         binding.retrofitRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.retrofitRecyclerView.adapter = adapter
 
+        // 데이터 로드 및 어댑터에 전달
+        loadData()
+
+    }
+
+    private fun loadData() {
         // ViewModel의 PagingData 관찰
         viewModel.reservationListPagingData.observe(viewLifecycleOwner, { pagingData ->
             adapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
         })
+    }
+
+    // 프래그먼트 B로 데이터 전달 및 화면 이동
+    private fun navigateToFragmentB(item: ReservationListDTO) {
+        val bundle = Bundle().apply {
+            putString("itemName", item.name)
+            putInt("itemPrice", item.price.toInt())
+            putString("itemDescription", item.description)
+            putString("imageUrl", "http://192.168.219.200:8080/items/${item.itemRepImageId}/itemImageObjectId")
+            putString("imageUrl2", "http://192.168.219.200:8080/items/${item.itemAdd1ImageId}/itemImageObjectId")
+            putString("imageUrl3", "http://192.168.219.200:8080/items/${item.itemAdd2ImageId}/itemImageObjectId")
+            putString("imageUrl4", "http://192.168.219.200:8080/items/${item.itemAdd3ImageId}/itemImageObjectId")
+            putString("imageUrl5", "http://192.168.219.200:8080/items/${item.itemAdd4ImageId}/itemImageObjectId")
+        }
+
+        val fragmentB = ReservationDetailFragment().apply {
+            arguments = bundle
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragmentB)
+            .addToBackStack(null)
+            .commit()
     }
 
 

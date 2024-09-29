@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".reservationListPaging.ui.ReservationDetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+
+            <!-- 상품 이름 -->
+            <TextView
+                android:id="@+id/itemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상품이름"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <!-- 상품 가격 -->
+            <TextView
+                android:id="@+id/itemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상품가격"
+                android:textSize="16sp"/>
+
+            <!-- 상품 설명 -->
+            <TextView
+                android:id="@+id/itemDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상품설명"
+                android:textSize="14sp"/>
+
+            <!-- 대표 이미지 -->
+            <ImageView
+                android:id="@+id/itemRepImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 1 -->
+            <ImageView
+                android:id="@+id/itemAddImage1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 2 -->
+            <ImageView
+                android:id="@+id/itemAddImage2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 3 -->
+            <ImageView
+                android:id="@+id/itemAddImage3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 4 -->
+            <ImageView
+                android:id="@+id/itemAddImage4"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+
+<!--            스크롤 확인용 더미 데이터-->
+            <!-- 대표 이미지 -->
+            <ImageView
+                android:id="@+id/itemRepImage2"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 1 -->
+            <ImageView
+                android:id="@+id/itemAddImage12"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 2 -->
+            <ImageView
+                android:id="@+id/itemAddImage22"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 3 -->
+            <ImageView
+                android:id="@+id/itemAddImage32"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+            <!-- 추가 이미지 4 -->
+            <ImageView
+                android:id="@+id/itemAddImage42"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_basic"
+                android:scaleType="centerCrop"/>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

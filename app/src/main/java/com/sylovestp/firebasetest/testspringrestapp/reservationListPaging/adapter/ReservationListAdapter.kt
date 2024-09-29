@@ -12,7 +12,7 @@ import com.sylovestp.firebasetest.testspringrestapp.databinding.ReservationListV
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.dto.ItemListDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationListDTO
 
-class ReservationListAdapter : PagingDataAdapter<ReservationListDTO, ReservationListAdapter.ReservationListViewHolder>(DIFF_CALLBACK) {
+class ReservationListAdapter(private val onItemClick: (ReservationListDTO) -> Unit) : PagingDataAdapter<ReservationListDTO, ReservationListAdapter.ReservationListViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservationListViewHolder {
         val binding = ReservationListViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,7 +26,7 @@ class ReservationListAdapter : PagingDataAdapter<ReservationListDTO, Reservation
         }
     }
 
-    class ReservationListViewHolder(private val binding: ReservationListViewBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ReservationListViewHolder(private val binding: ReservationListViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: ReservationListDTO) {
             binding.itemName.text = item.name
@@ -41,6 +41,11 @@ class ReservationListAdapter : PagingDataAdapter<ReservationListDTO, Reservation
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.itemRepImage)
+
+            // 이미지 클릭 리스너 설정
+            binding.itemRepImage.setOnClickListener {
+                onItemClick(item) // 아이템 클릭 시 프래그먼트 A에 데이터 전달
+            }
         }
     }
 
