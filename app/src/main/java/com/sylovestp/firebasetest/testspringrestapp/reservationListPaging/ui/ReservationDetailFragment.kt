@@ -1,15 +1,19 @@
 package com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.ui
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationDetailBinding
+import java.util.Calendar
 
 class ReservationDetailFragment : Fragment() {
     private lateinit var binding: FragmentReservationDetailBinding
@@ -36,6 +40,61 @@ class ReservationDetailFragment : Fragment() {
         pagerAdapter = ScreenSlidePagerAdapter(this)
         viewPager.adapter = pagerAdapter
 
+        // 현재 날짜를 가져오기 위한 Calendar 인스턴스
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+
+        // 날짜 선택 (현재 날짜로 초기화)
+        binding.datePicker.init(currentYear, currentMonth, currentDay) { _, year, monthOfYear, dayOfMonth ->
+            // 날짜가 선택될 때 동작
+            val selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
+            // 필요한 경우 이 날짜를 사용
+        }
+        // 과거 날짜 선택 방지: 오늘 날짜 이후로만 선택 가능
+        binding.datePicker.minDate = calendar.timeInMillis
+
+        // 시간대 배열을 0:00 ~ 24:00까지 설정
+        val timeRanges = Array(24) { i -> "${i}:00 ~ ${i + 1}:00" }
+
+        // Spinner의 어댑터 설정
+        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, timeRanges)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.timeUnitSpinner.adapter = spinnerAdapter
+
+        // Spinner에서 선택된 시간대에 따라 UI 업데이트
+        binding.timeUnitSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // 선택된 시간대에 따라 TextView 업데이트
+                binding.timeRange.text = "예약 가능 시간: ${timeRanges[position]}"
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 아무 항목도 선택되지 않았을 때의 처리
+            }
+        }
+
+        // 사용자 수 선택
+        binding.userCountPicker.apply {
+            minValue = 1
+            maxValue = 10
+            wrapSelectorWheel = true
+            setOnValueChangedListener { _, _, newVal ->
+                // 사용자 수가 변경될 때 동작
+                val selectedUserCount = newVal
+                // 필요한 경우 이 값을 사용
+            }
+        }
+
+        // SharedPreferences 객체를 가져옴
+        val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+        // SharedPreferences에서 "jwt_token"이라는 키로 저장된 토큰을 가져옴
+        val userName = sharedPreferences.getString("name", null)
+
+        binding.reservationUserName.text = userName
+
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,26 +116,7 @@ class ReservationDetailFragment : Fragment() {
         binding.itemPrice.text = itemPrice?.toString()
         binding.itemDescription.text = itemDescription
 
-        // 이미지를 Glide로 로드
-        Glide.with(this)
-            .load(imageUrl)
-            .into(binding.itemRepImage)
 
-        Glide.with(this)
-            .load(imageUrl2)
-            .into(binding.itemAddImage1)
-
-        Glide.with(this)
-            .load(imageUrl3)
-            .into(binding.itemAddImage2)
-
-        Glide.with(this)
-            .load(imageUrl4)
-            .into(binding.itemAddImage3)
-
-        Glide.with(this)
-            .load(imageUrl5)
-            .into(binding.itemAddImage4)
     }
 
     override fun onPause() {

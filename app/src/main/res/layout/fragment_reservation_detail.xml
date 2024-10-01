@@ -47,78 +47,61 @@
                 android:text="상품설명"
                 android:textSize="14sp"/>
 
-            <!-- 대표 이미지 -->
-            <ImageView
-                android:id="@+id/itemRepImage"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 1 -->
-            <ImageView
-                android:id="@+id/itemAddImage1"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 2 -->
-            <ImageView
-                android:id="@+id/itemAddImage2"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 3 -->
-            <ImageView
-                android:id="@+id/itemAddImage3"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 4 -->
-            <ImageView
-                android:id="@+id/itemAddImage4"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
+            <!-- 예약자 -->
+            <TextView
+                android:id="@+id/reservationUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="예약자"
+                android:textSize="18sp"/>
 
-<!--            스크롤 확인용 더미 데이터-->
-            <!-- 대표 이미지 -->
-            <ImageView
-                android:id="@+id/itemRepImage2"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 1 -->
-            <ImageView
-                android:id="@+id/itemAddImage12"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 2 -->
-            <ImageView
-                android:id="@+id/itemAddImage22"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 3 -->
-            <ImageView
-                android:id="@+id/itemAddImage32"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
-            <!-- 추가 이미지 4 -->
-            <ImageView
-                android:id="@+id/itemAddImage42"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_basic"
-                android:scaleType="centerCrop"/>
+            <!-- 날짜 선택 -->
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                android:spinnersShown="true" />
+
+            <!-- 시간대 표시 -->
+            <TextView
+                android:id="@+id/timeRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selected time range: 0:00 ~ 1:00"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp" />
+
+            <!-- 시간 단위 선택 -->
+            <Spinner
+                android:id="@+id/timeUnitSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" />
+
+            <!-- 사용자 수 선택 -->
+            <TextView
+                android:id="@+id/userCountLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="예약 인원:"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp" />
+
+            <NumberPicker
+                android:id="@+id/userCountPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               />
+
+            <Button
+                android:id="@+id/reservateBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="예약하기"/>
+
+
         </LinearLayout>
     </ScrollView>
 
