@@ -21,6 +21,8 @@ import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.F
 import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.LoginFragment
 
 class MainFragmentActivity : AppCompatActivity() {
+    // 안드로이드 스튜디오 코알라, 레이디버그로 업그레이드시, 컴파일러 오류 발생함.
+
     private lateinit var binding: ActivityMainFragmentBinding
     private lateinit var tabLayout: TabLayout
 
