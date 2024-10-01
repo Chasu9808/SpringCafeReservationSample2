@@ -28,6 +28,7 @@ import com.sylovestp.firebasetest.testspringrestapp.LoginActivity
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentJoinBinding
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserDTO
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -283,4 +284,9 @@ class JoinFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
         return byteArrayOutputStream.toByteArray()
     }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainFragmentActivity)?.hideTabs()  // Fragment 1 이외의 프래그먼트에서는 탭 숨김
+    }//
 }

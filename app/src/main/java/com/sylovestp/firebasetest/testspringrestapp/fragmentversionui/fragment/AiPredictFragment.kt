@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentAiPredictBinding
 import com.sylovestp.firebasetest.testspringrestapp.dto.PredictionResult
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
 import kotlinx.coroutines.Dispatchers
@@ -181,6 +182,11 @@ class AiPredictFragment : Fragment() {
         val percentageValue = value * 100
         return String.format("%.2f", percentageValue) + "%"
     }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainFragmentActivity)?.hideTabs()  // Fragment 1 이외의 프래그먼트에서는 탭 숨김
+    }//
 
 
 }

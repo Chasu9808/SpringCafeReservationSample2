@@ -459,5 +459,9 @@ class MyPageFragment : Fragment() {
         return byteArrayOutputStream.toByteArray()
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainFragmentActivity)?.hideTabs()  // Fragment 1 이외의 프래그먼트에서는 탭 숨김
+    }//
 
 }

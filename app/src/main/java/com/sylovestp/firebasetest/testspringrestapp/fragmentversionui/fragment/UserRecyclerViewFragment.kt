@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentUserRecyclerViewBinding
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.paging.adapter.UserAdapter
 import com.sylovestp.firebasetest.testspringrestapp.paging.viewModel.UserViewModel
 import com.sylovestp.firebasetest.testspringrestapp.paging.viewModel.UserViewModelFactory
@@ -58,6 +59,10 @@ class UserRecyclerViewFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainFragmentActivity)?.hideTabs()  // Fragment 1 이외의 프래그먼트에서는 탭 숨김
+    }//
 
 
 }

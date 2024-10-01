@@ -1,6 +1,7 @@
 package com.sylovestp.firebasetest.testspringrestapp.fragmentversionui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -21,12 +22,16 @@ import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.fragment.L
 
 class MainFragmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainFragmentBinding
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainFragmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        tabLayout = binding.tabLayout
 
         // Add tabs
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("홈").setIcon(R.drawable.home_24px_fill))
@@ -91,7 +96,17 @@ class MainFragmentActivity : AppCompatActivity() {
             navigateToFragment(FragmentOne(), false)
         }
 
+        showTabs()
     } //onCreate
+
+    //탭 뷰 보이게 설정.
+    fun showTabs() {
+        tabLayout.visibility = View.VISIBLE
+    }
+
+    fun hideTabs() {
+        tabLayout.visibility = View.GONE
+    }
 
     // 프래그먼트를 교체하는 메서드
     fun navigateToFragment(fragment: Fragment, useBackStack: Boolean) {

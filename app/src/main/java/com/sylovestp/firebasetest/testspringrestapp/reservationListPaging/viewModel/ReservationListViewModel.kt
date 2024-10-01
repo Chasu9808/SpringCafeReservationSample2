@@ -2,9 +2,11 @@ package com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.viewM
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.liveData
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationListDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.pagingSource.ReservationListPagingSource
@@ -18,5 +20,5 @@ class ReservationListViewModel(private val apiService: INetworkService) : ViewMo
             enablePlaceholders = false
         ),
         pagingSourceFactory = { ReservationListPagingSource(apiService) }
-    ).liveData
+    ).liveData.cachedIn(viewModelScope) // viewModelScope 내에서 캐싱
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationItemListBinding
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationListBinding
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.adapter.ItemListAdapter
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.factory.ItemListViewModelFactory
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.viewModel.ItemListViewModel
@@ -90,9 +91,14 @@ class ReservationListFragment : Fragment() {
 
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragmentB)
-//            .addToBackStack(null)
+            .addToBackStack(null)
             .commit()
     }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainFragmentActivity)?.hideTabs()  // Fragment 1 이외의 프래그먼트에서는 탭 숨김
+    }//
 
 
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationItemListBinding
+import com.sylovestp.firebasetest.testspringrestapp.fragmentversionui.MainFragmentActivity
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.adapter.ItemListAdapter
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.factory.ItemListViewModelFactory
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.viewModel.ItemListViewModel
@@ -64,5 +65,10 @@ class ReservationItemListFragment : Fragment() {
             .remove(this)
             .commitAllowingStateLoss()
     }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainFragmentActivity)?.hideTabs()  // Fragment 1 이외의 프래그먼트에서는 탭 숨김
+    }//
 
 }

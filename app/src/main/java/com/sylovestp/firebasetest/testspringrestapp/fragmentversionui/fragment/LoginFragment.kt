@@ -99,5 +99,12 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show()
             }
         }
-    }
+    } //
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainFragmentActivity)?.hideTabs()  // Fragment 1 이외의 프래그먼트에서는 탭 숨김
+    } //
+
+
 }

@@ -47,23 +47,23 @@ class FragmentOne : Fragment() {
         // user_login_icon 클릭 시 LoginFragment로 이동하는 코드
         binding.userLoginIcon.setOnClickListener {
             // 백스택에 추가하지 않고 Fragment B로 이동
-            (activity as MainFragmentActivity).navigateToFragment(LoginFragment(), false)
+            (activity as MainFragmentActivity).navigateToFragment(LoginFragment(), true)
         }
 
         // user_join_icon 클릭 시 JoinFragment로 이동하는 코드
         binding.userJoinIcon.setOnClickListener {
             // 백스택에 추가하지 않고 Fragment B로 이동
-            (activity as MainFragmentActivity).navigateToFragment(JoinFragment(), false)
+            (activity as MainFragmentActivity).navigateToFragment(JoinFragment(), true)
         }
 
         // user_paging_icon 클릭 시 UserRecyclerViewFragment 이동하는 코드
         binding.userPagingIcon.setOnClickListener {
-            (activity as MainFragmentActivity).navigateToFragment(UserRecyclerViewFragment(), false)
+            (activity as MainFragmentActivity).navigateToFragment(UserRecyclerViewFragment(), true)
         }
 
         // ai_Image_Classify_icon 클릭 시 AiPredictFragment 이동하는 코드
         binding.aiImageClassifyIcon.setOnClickListener {
-            (activity as MainFragmentActivity).navigateToFragment(AiPredictFragment(), false)
+            (activity as MainFragmentActivity).navigateToFragment(AiPredictFragment(), true)
         }
 
         // payTestIcon 클릭 시 , 결제 액티비티로 MainActivity 이동하는 코드
@@ -80,13 +80,13 @@ class FragmentOne : Fragment() {
 
         // 예약 현황 조회
         binding.reservationListIcon.setOnClickListener {
-            (activity as MainFragmentActivity).navigateToFragment(ReservationItemListFragment(), false)
+            (activity as MainFragmentActivity).navigateToFragment(ReservationItemListFragment(), true)
 
         }
 
         // 예약하기 -> 상품 조회
         binding.reservateItemIcon.setOnClickListener {
-            (activity as MainFragmentActivity).navigateToFragment(ReservationListFragment(), false)
+            (activity as MainFragmentActivity).navigateToFragment(ReservationListFragment(), true)
         }
 
         // 마이페이지 이동하는 코드
@@ -97,7 +97,7 @@ class FragmentOne : Fragment() {
 //                .replace(R.id.fragment_container, MyPageFragment()) // ReservationItemListFragment 전환
 //                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
 //                .commit()
-            (activity as MainFragmentActivity).navigateToFragment(MyPageFragment(), false)
+            (activity as MainFragmentActivity).navigateToFragment(MyPageFragment(), true)
         }
 
         // SharedPreferences 객체를 가져옴
@@ -207,12 +207,16 @@ class FragmentOne : Fragment() {
         super.onPause()
         // 프래그먼트가 일시 중지되면 자동 슬라이드를 멈춤
         handler.removeCallbacks(runnable)
+        // Fragment를 떠날 때 탭을 숨김
+        (activity as? MainFragmentActivity)?.hideTabs()
     }
 
     override fun onResume() {
         super.onResume()
         // 프래그먼트가 다시 활성화되면 자동 슬라이드를 재개
         handler.postDelayed(runnable, slideInterval)
+        // Fragment로 돌아올 때 탭을 다시 보이게 함
+        (activity as? MainFragmentActivity)?.showTabs()
     }
 
     // 뒤로 가기 버튼을 눌렀을 때 호출되는 메서드
@@ -223,7 +227,7 @@ class FragmentOne : Fragment() {
             .setMessage("이 화면을 종료하시겠습니까?")
             .setPositiveButton("예") { _, _ ->
                 // "예"를 선택하면 프래그먼트 종료
-                requireActivity().supportFragmentManager.popBackStack()
+                requireActivity().finish()
             }
             .setNegativeButton("아니요", null) // "아니요"를 선택하면 아무 동작도 하지 않음
             .show()
