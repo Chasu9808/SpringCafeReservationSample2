@@ -2,20 +2,29 @@ package com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationDetailBinding
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.TimeSlotAvailableDTO
+import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
+import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.util.Calendar
 
 class ReservationDetailFragment : Fragment() {
+    private lateinit var apiService: INetworkService
     private lateinit var binding: FragmentReservationDetailBinding
     private lateinit var viewPager: ViewPager2
     private lateinit var pagerAdapter: FragmentStateAdapter
@@ -26,6 +35,7 @@ class ReservationDetailFragment : Fragment() {
     private var imageUrl3: String? = null
     private var imageUrl4: String? = null
     private var imageUrl5: String? = null
+    private var itemId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,8 +59,13 @@ class ReservationDetailFragment : Fragment() {
         // 날짜 선택 (현재 날짜로 초기화)
         binding.datePicker.init(currentYear, currentMonth, currentDay) { _, year, monthOfYear, dayOfMonth ->
             // 날짜가 선택될 때 동작
-            val selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
+//            val selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
+            val selectedDate = "$year-${String.format("%02d", monthOfYear + 1)}-${String.format("%02d", dayOfMonth)}"
             // 필요한 경우 이 날짜를 사용
+            val timeSlotAvailableDTO = TimeSlotAvailableDTO(itemId.toString(), selectedDate)
+
+            // API 호출
+            fetchAvailableTimeSlots(timeSlotAvailableDTO)
         }
         // 과거 날짜 선택 방지: 오늘 날짜 이후로만 선택 가능
         binding.datePicker.minDate = calendar.timeInMillis
@@ -74,6 +89,8 @@ class ReservationDetailFragment : Fragment() {
                 // 아무 항목도 선택되지 않았을 때의 처리
             }
         }
+
+
 
         // 사용자 수 선택
         binding.userCountPicker.apply {
@@ -104,6 +121,7 @@ class ReservationDetailFragment : Fragment() {
         val itemName = arguments?.getString("itemName")
         val itemPrice = arguments?.getInt("itemPrice")
         val itemDescription = arguments?.getString("itemDescription")
+        itemId = arguments?.getLong("id")
         // arguments로 전달된 값을 초기화
         imageUrl = arguments?.getString("imageUrl")
         imageUrl2 = arguments?.getString("imageUrl2")
@@ -165,6 +183,54 @@ class ReservationDetailFragment : Fragment() {
             fragment.arguments = args
             return fragment
 
+        }
+    }
+
+    private fun fetchAvailableTimeSlots(timeSlotAvailableDTO: TimeSlotAvailableDTO) {
+        // Retrofit 인스턴스 가져오기
+        val myApplication = requireActivity().applicationContext as MyApplication
+        myApplication.initialize(requireActivity())
+        apiService = myApplication.getApiService()
+
+
+        // 코루틴을 사용한 API 호출
+        lifecycleScope.launch {
+            try {
+                // 네트워크 요청 (비동기)
+                val availableSlots = apiService.getAvailableTimeSlots(timeSlotAvailableDTO)
+
+                // 성공 시 처리
+                Log.d("lsy MyFragment", "Available Time Slots: $availableSlots")
+
+                // 시간대 배열을 0:00 ~ 24:00까지 설정
+                val timeRanges = availableSlots.map { i -> "${i}:00 ~ ${i + 1}:00" }
+
+                // Spinner의 어댑터 설정
+                val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, timeRanges)
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.timeUnitSpinner.adapter = spinnerAdapter
+
+                // Spinner에서 선택된 시간대에 따라 UI 업데이트
+                binding.timeUnitSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                        // 선택된 시간대에 따라 TextView 업데이트
+                        binding.timeRange.text = "예약 가능 시간: ${timeRanges[position]}"
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        // 아무 항목도 선택되지 않았을 때의 처리
+                    }
+                }
+
+            } catch (e: HttpException) {
+                // HTTP 오류 처리
+                Log.e("lsy MyFragment", "Request failed with code: ${e.code()}")
+                Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                // 네트워크 또는 기타 오류 처리
+                Log.e("lsy MyFragment", "Network failure: ${e.message}")
+                Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

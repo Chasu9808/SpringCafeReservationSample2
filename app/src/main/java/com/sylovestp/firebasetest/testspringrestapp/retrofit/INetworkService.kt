@@ -7,6 +7,7 @@ import com.sylovestp.firebasetest.testspringrestapp.dto.PredictionResult
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserItem
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.dto.ItemListDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationListDTO
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.TimeSlotAvailableDTO
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -99,4 +100,9 @@ interface INetworkService {
     //아이디 중복 검사
     @POST("/public/users/check-username")
     suspend fun checkUsername(@Body request: Map<String?, String?>?): Response<MutableMap<String?, Boolean?>?>
+
+    //이용가능 시간 조회
+    @POST("/api/reservations/available-times")
+    suspend fun getAvailableTimeSlots(@Body timeSlotAvailableDTO: TimeSlotAvailableDTO): List<Int>
+
 }

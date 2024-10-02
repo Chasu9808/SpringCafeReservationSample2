@@ -75,6 +75,7 @@ class ReservationListFragment : Fragment() {
     // 프래그먼트 B로 데이터 전달 및 화면 이동
     private fun navigateToFragmentB(item: ReservationListDTO) {
         val bundle = Bundle().apply {
+            putLong("id",item.id)
             putString("itemName", item.name)
             putInt("itemPrice", item.price.toInt())
             putString("itemDescription", item.description)
