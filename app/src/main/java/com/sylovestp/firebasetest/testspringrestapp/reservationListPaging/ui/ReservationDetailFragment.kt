@@ -1,6 +1,7 @@
 package com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.ui
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,17 +11,21 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationDetailBinding
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.TimeSlotAvailableDTO
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.MyApplication
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class ReservationDetailFragment : Fragment() {
@@ -36,6 +41,7 @@ class ReservationDetailFragment : Fragment() {
     private var imageUrl4: String? = null
     private var imageUrl5: String? = null
     private var itemId: Long? = null
+    private var userName2: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,11 +115,13 @@ class ReservationDetailFragment : Fragment() {
 
         // SharedPreferences에서 "jwt_token"이라는 키로 저장된 토큰을 가져옴
         val userName = sharedPreferences.getString("name", null)
+        userName2 = sharedPreferences.getString("username", null)
 
         binding.reservationUserName.text = userName
 
         return binding.root
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -134,6 +142,61 @@ class ReservationDetailFragment : Fragment() {
         binding.itemPrice.text = itemPrice?.toString()
         binding.itemDescription.text = itemDescription
 
+        // 버튼 클릭 리스너 안에서 데이터를 수집하고 전송하는 코드
+        binding.reservateBtn.setOnClickListener {
+            // 선택한 날짜와 시간대, 사용자 수, 그리고 사용자 이름 가져오기
+            val selectedDate = "${binding.datePicker.year}-${String.format("%02d", binding.datePicker.month + 1)}-${String.format("%02d", binding.datePicker.dayOfMonth)}"
+            val timeString = binding.timeRange.text.toString() // "Reservation available time: 13:00 ~ 14:00"
+            val timePart = timeString.split(" ")[3] // "13:00"
+            val selectedHour = timePart.split(":")[0] // "13"
+
+            val selectedHourInt = selectedHour.toInt()
+            val userCount = binding.userCountPicker.value // 사용자 수
+            val userName = binding.reservationUserName.text.toString() // 사용자 이름
+
+            // arguments에서 전달받은 상품 이름과 가격 가져오기
+            val itemName = arguments?.getString("itemName") ?: ""
+            val itemPrice = arguments?.getInt("itemPrice")?.toString() ?: "0"
+
+            // ReservationDTO 객체 생성
+            val reservationDto = userName2?.let { it1 ->
+                ReservationDTO(
+                    reservationName = it1,         // 예약자 이름
+                    reservationDate = LocalDate.parse(selectedDate, DateTimeFormatter.ISO_LOCAL_DATE), // 예약 날짜
+                    reservationCount = userCount,       // 예약 인원
+                    selectedItemName = itemName,        // 선택된 상품 이름
+                    selectedItemPrice = itemPrice,      // 선택된 상품 가격
+                    reservationTime = selectedHour, // 예약 시간
+                    payStatus = "입금대기"
+                )
+            }
+            Log.d("lsy reservationDto",": ${reservationDto}")
+            // 코루틴을 이용하여 Retrofit 호출
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    val myApplication = requireActivity().applicationContext as MyApplication
+                    myApplication.initialize(requireActivity())
+                    apiService = myApplication.getApiService()
+
+                    Log.d("lsy reservationDto2",": ${reservationDto}")
+                    // 예약 데이터를 서버로 전송
+                    val response = reservationDto?.let { it1 -> apiService.createReservation(it1) }
+
+                    // 성공적으로 예약이 처리된 경우
+                    if (response != null) {
+                        Toast.makeText(context, "예약 성공: ${response.reservationId}", Toast.LENGTH_SHORT).show()
+                    }
+
+                    // 응답 데이터를 활용하여 UI 업데이트 가능
+                    // 예: 예약 세부 정보 표시
+
+
+                } catch (e: Exception) {
+                    // 네트워크 오류 또는 API 호출 실패 처리
+                    Toast.makeText(context, "예약 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+}
 
     }
 

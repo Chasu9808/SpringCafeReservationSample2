@@ -6,6 +6,8 @@ import com.sylovestp.firebasetest.testspringrestapp.dto.PageResponse
 import com.sylovestp.firebasetest.testspringrestapp.dto.PredictionResult
 import com.sylovestp.firebasetest.testspringrestapp.dto.UserItem
 import com.sylovestp.firebasetest.testspringrestapp.itemListPaging.dto.ItemListDTO
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationDTO
+import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationItemDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationListDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.TimeSlotAvailableDTO
 import okhttp3.MultipartBody
@@ -16,6 +18,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -104,5 +107,13 @@ interface INetworkService {
     //이용가능 시간 조회
     @POST("/api/reservations/available-times")
     suspend fun getAvailableTimeSlots(@Body timeSlotAvailableDTO: TimeSlotAvailableDTO): List<Int>
+
+
+    //예약하기
+    @POST("/api/reservations")
+    @Headers("Content-Type: application/json")
+    suspend fun createReservation(
+        @Body reservationDto: ReservationDTO // POST request data
+    ): ReservationItemDTO // Response data format from the server
 
 }
