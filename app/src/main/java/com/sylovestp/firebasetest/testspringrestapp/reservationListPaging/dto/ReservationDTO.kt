@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 data class ReservationDTO(
     val reservationName: String,        // 예약자 이름
-    val reservationDate: LocalDate,     // 예약 날짜
+    val reservationDate: String,     // 예약 날짜
     val reservationCount: Int,          // 예약 인원
     val selectedItemName: String,       // 선택된 상품 이름
     val selectedItemPrice: String,      // 선택된 상품 가격

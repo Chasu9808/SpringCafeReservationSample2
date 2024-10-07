@@ -162,7 +162,7 @@ class ReservationDetailFragment : Fragment() {
             val reservationDto = userName2?.let { it1 ->
                 ReservationDTO(
                     reservationName = it1,         // 예약자 이름
-                    reservationDate = LocalDate.parse(selectedDate, DateTimeFormatter.ISO_LOCAL_DATE), // 예약 날짜
+                    reservationDate = LocalDate.parse(selectedDate, DateTimeFormatter.ISO_LOCAL_DATE).toString(), // 예약 날짜
                     reservationCount = userCount,       // 예약 인원
                     selectedItemName = itemName,        // 선택된 상품 이름
                     selectedItemPrice = itemPrice,      // 선택된 상품 가격
@@ -178,7 +178,6 @@ class ReservationDetailFragment : Fragment() {
                     myApplication.initialize(requireActivity())
                     apiService = myApplication.getApiService()
 
-                    Log.d("lsy reservationDto2",": ${reservationDto}")
                     // 예약 데이터를 서버로 전송
                     val response = reservationDto?.let { it1 -> apiService.createReservation(it1) }
 
@@ -194,6 +193,7 @@ class ReservationDetailFragment : Fragment() {
                 } catch (e: Exception) {
                     // 네트워크 오류 또는 API 호출 실패 처리
                     Toast.makeText(context, "예약 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Log.d("lsy reservationDto error",": ${e.message}")
                 }
             }
 }

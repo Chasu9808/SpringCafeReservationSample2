@@ -111,7 +111,6 @@ interface INetworkService {
 
     //예약하기
     @POST("/api/reservations")
-    @Headers("Content-Type: application/json")
     suspend fun createReservation(
         @Body reservationDto: ReservationDTO // POST request data
     ): ReservationItemDTO // Response data format from the server

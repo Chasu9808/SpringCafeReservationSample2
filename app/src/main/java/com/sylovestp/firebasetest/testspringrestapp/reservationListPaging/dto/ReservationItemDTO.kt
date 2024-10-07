@@ -6,7 +6,7 @@ import java.time.LocalDate
 data class ReservationItemDTO(
     val reservationId: Long,
     val reservationItemId: Long,
-    val reservationDate: LocalDate,
+    val reservationDate: String,
     val reservationTime: String,
     val username: String,
     val phone: String,
