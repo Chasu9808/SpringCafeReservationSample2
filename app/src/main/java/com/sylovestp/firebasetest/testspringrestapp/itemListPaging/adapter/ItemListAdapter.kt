@@ -1,6 +1,7 @@
 package com.sylovestp.firebasetest.testspringrestapp.itemListPaging.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -40,6 +41,15 @@ class ItemListAdapter : PagingDataAdapter<ItemListDTO, ItemListAdapter.ItemListV
             binding.reservationItemPayStatus.text = item.payStatus
             binding.itemPrice.text = item.price.toString()
             binding.itemDescription.text = item.description
+
+            // Check if payStatus is "waiting for deposit"
+            if ( binding.reservationItemPayStatus.text == "입금대기") {
+                // Make button visible
+                binding.payBtn.visibility = View.VISIBLE
+            } else {
+                // Otherwise, make button invisible or gone
+                binding.payBtn.visibility = View.GONE
+            }
 
 //            val imageUrl = "http://10.100.201.87:8080/items/${item.itemRepImageId}/itemImageObjectId"
             val imageUrl = "http://192.168.219.200:8080/items/${item.itemRepImageId}/itemImageObjectId"
