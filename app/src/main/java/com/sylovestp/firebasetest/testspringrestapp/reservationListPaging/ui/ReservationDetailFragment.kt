@@ -1,6 +1,7 @@
 package com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.ui
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.testspringrestapp.R
 import com.sylovestp.firebasetest.testspringrestapp.databinding.FragmentReservationDetailBinding
+import com.sylovestp.firebasetest.testspringrestapp.pay.ui.MainActivity
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.ReservationDTO
 import com.sylovestp.firebasetest.testspringrestapp.reservationListPaging.dto.TimeSlotAvailableDTO
 import com.sylovestp.firebasetest.testspringrestapp.retrofit.INetworkService
@@ -184,6 +186,18 @@ class ReservationDetailFragment : Fragment() {
                     // 성공적으로 예약이 처리된 경우
                     if (response != null) {
                         Toast.makeText(context, "예약 성공: ${response.reservationId}", Toast.LENGTH_SHORT).show()
+                        // 결제 페이지로 이동, 데이터도 같이 전송.
+                        val intent = Intent(requireActivity(), MainActivity::class.java)
+                        // Pass data using putExtra
+                        intent.putExtra("reservationId", "${response.reservationId}")
+                        intent.putExtra("reservationDate", "${response.reservationDate}")
+                        intent.putExtra("reservationTime", "${response.reservationTime}")
+                        intent.putExtra("username", "${response.username}")
+                        intent.putExtra("phone", "${response.phone}")
+                        intent.putExtra("address", "${response.address}")
+                        intent.putExtra("name", "${response.name}")
+                        intent.putExtra("price", "${response.price}")
+                        startActivity(intent)
                     }
 
                     // 응답 데이터를 활용하여 UI 업데이트 가능

@@ -37,6 +37,36 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
         }
+        // Get data from the intent
+        val reservationId = intent.getStringExtra("reservationId")
+        val reservationDate = intent.getStringExtra("reservationDate")
+        val reservationTime = intent.getStringExtra("reservationTime")
+        val username = intent.getStringExtra("username")
+        val phone = intent.getStringExtra("phone")
+        val address = intent.getStringExtra("address")
+        val name = intent.getStringExtra("name")
+        val price = intent.getStringExtra("price")
+
+        Log.d("lsy ReservationDetails", "Reservation ID: $reservationId")
+        Log.d("lsy ReservationDetails", "Reservation Date: $reservationDate")
+        Log.d("lsy ReservationDetails", "Reservation Time: $reservationTime")
+        Log.d("lsy ReservationDetails", "Username: $username")
+        Log.d("lsy ReservationDetails", "Phone: $phone")
+        Log.d("lsy ReservationDetails", "Address: $address")
+        Log.d("lsy ReservationDetails", "Name: $name")
+        Log.d("lsy ReservationDetails", "Price: $price")
+
+        val bundle = Bundle()
+        bundle.putString("reservationId", reservationId)
+        bundle.putString("reservationDate", reservationDate)
+        bundle.putString("reservationTime", reservationTime)
+        bundle.putString("username", username)
+        bundle.putString("phone", phone)
+        bundle.putString("address", address)
+        bundle.putString("name", name)
+        bundle.putString("price", price)
+
+        paymentFragment.arguments = bundle
 
         // use fragment
 //        replaceFragment(paymentFragment)

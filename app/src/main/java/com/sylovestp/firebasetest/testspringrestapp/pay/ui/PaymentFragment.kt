@@ -36,6 +36,17 @@ import java.util.*
 
 class PaymentFragment : Fragment() {
 
+
+    // 전역 변수 선언
+    private var reservationId: String? = null
+    private var reservationDate: String? = null
+    private var reservationTime: String? = null
+    private var username: String? = null
+    private var phone: String? = null
+    private var address: String? = null
+    private var name: String? = null
+    private var price: String? = null
+
     private lateinit var binding: FragmentPaymentBinding
 
     private val receiver = MerchantReceiver()
@@ -58,6 +69,29 @@ class PaymentFragment : Fragment() {
     //   false: 세 번째 인수로 false를 전달하는 것은 View를 즉시 container에 추가하지 않겠다는 뜻입니다.
     //   Fragment가 직접 부모에 뷰를 추가하지 않고, 시스템이 알아서 처리하게 됩니다.
         binding = FragmentPaymentBinding.inflate(inflater, container, false)
+
+        // 결제 정보 준비물
+         reservationId = arguments?.getString("reservationId")
+         reservationDate = arguments?.getString("reservationDate")
+         reservationTime = arguments?.getString("reservationTime")
+         username = arguments?.getString("username")
+         phone = arguments?.getString("phone")
+         address = arguments?.getString("address")
+         name = arguments?.getString("name")
+         price = arguments?.getString("price")
+         val priceInt = price?.toDouble()?.toInt()
+         price = priceInt.toString()
+
+        Log.d("lsy PaymentFragment", "Reservation ID: $reservationId")
+        Log.d("lsy PaymentFragment", "Reservation Date: $reservationDate")
+        Log.d("lsy PaymentFragment", "Reservation Time: $reservationTime")
+        Log.d("lsy PaymentFragment", "Username: $username")
+        Log.d("lsy PaymentFragment", "Phone: $phone")
+        Log.d("lsy PaymentFragment", "Address: $address")
+        Log.d("lsy PaymentFragment", "Name: $name")
+        Log.d("lsy PaymentFragment", "Price: $price")
+
+
         initStart()
         return binding.root
     }
@@ -147,14 +181,18 @@ class PaymentFragment : Fragment() {
         binding.pg.adapter = pgAdapter
         binding.pg.onItemSelectedListener = pgSelectListener
 
+        // 결제명, 랜덤 muid, 가격, 카드사 다이렉트
+
         binding.name.doAfterTextChanged {
             viewModel.paymentName = it.toString()
         }
-        binding.name.setText("아임포트 Android SDK 결제 테스트")
+//        binding.name.setText("아임포트 Android SDK 결제 테스트")
+        binding.name.setText(name)
         binding.amount.doAfterTextChanged {
             viewModel.amount = it.toString()
         }
-        binding.amount.setText("1000")
+//        binding.amount.setText("100")
+        binding.amount.setText(price)
 
         binding.cardDirectCode.doAfterTextChanged {
             viewModel.cardDirectCode = it.toString()
