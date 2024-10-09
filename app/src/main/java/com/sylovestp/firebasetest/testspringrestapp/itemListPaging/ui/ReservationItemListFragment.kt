@@ -46,7 +46,7 @@ class ReservationItemListFragment : Fragment() {
             .get(ItemListViewModel::class.java)
 
         // RecyclerView 어댑터 설정
-        adapter = ItemListAdapter()
+        adapter = ItemListAdapter(apiService)
         binding.retrofitRecyclerView3.layoutManager = LinearLayoutManager(requireContext())
         binding.retrofitRecyclerView3.adapter = adapter
 

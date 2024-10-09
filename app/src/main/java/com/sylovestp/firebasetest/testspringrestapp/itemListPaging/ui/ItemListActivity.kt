@@ -45,7 +45,7 @@ class ItemListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, ItemListViewModelFactory(apiService))
             .get(ItemListViewModel::class.java)
 
-        adapter = ItemListAdapter()
+        adapter = ItemListAdapter(apiService)
         binding.retrofitRecyclerView3.layoutManager = LinearLayoutManager(this)
         binding.retrofitRecyclerView3.adapter = adapter
 

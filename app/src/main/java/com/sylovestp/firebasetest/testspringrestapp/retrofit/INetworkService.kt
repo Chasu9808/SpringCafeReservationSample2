@@ -115,4 +115,8 @@ interface INetworkService {
         @Body reservationDto: ReservationDTO // POST request data
     ): ReservationItemDTO // Response data format from the server
 
+    //예약상품 삭제(취소)
+    @DELETE("/api/reservation-items/{id}")
+    suspend fun deleteReservationItem(@Path("id") id: Long): Response<Void>
+
 }
