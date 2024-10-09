@@ -89,6 +89,8 @@ class FragmentOne : Fragment() {
             (activity as MainFragmentActivity).navigateToFragment(ReservationListFragment(), true)
         }
 
+        // 결제 목록 조회
+
         // 마이페이지 이동하는 코드
         binding.userProfileImage.setOnClickListener {
             // 프래그먼트 전환을 위한 FragmentTransaction 사용

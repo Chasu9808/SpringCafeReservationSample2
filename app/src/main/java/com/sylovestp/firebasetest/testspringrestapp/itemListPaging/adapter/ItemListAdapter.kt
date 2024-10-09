@@ -62,6 +62,7 @@ class ItemListAdapter(
             } else {
                 // Otherwise, make button invisible or gone
                 binding.payBtn.visibility = View.GONE
+                binding.cancelBtn.visibility = View.GONE
             }
 
             binding.payBtn.setOnClickListener {
